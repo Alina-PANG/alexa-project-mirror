@@ -73,11 +73,3 @@ function guidGenerator() {
     };
     return (S4());
 }
-
-function storeToPostgresql() {
-    var pg = require('pg');
-    var conString = "postgres://alexa_admin:infmatx117@db.us-east-2.rds.amazonaws.com:5432/testdb";
-
-    var client = new pg.Client(conString);
-    client.connect();
-}
