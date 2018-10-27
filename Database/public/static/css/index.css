@@ -1,0 +1,16 @@
+body{
+	margin: 0px;
+	display: flex;
+	font-family: Montserrat;
+	border: 0px;
+}
+button {
+	color: white;
+    background-color: #9530a7;
+    padding: 11px;
+    border-radius: 19px;
+}
+button:hover{
+	opacity: 0.5;	
+	cursor: pointer;
+}

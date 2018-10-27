@@ -1,49 +1,54 @@
-  var http = require("http"),  fs = require('fs');
-  fs.readFile('./index.html', function (err, html) {
-    if (err) {
-        throw err; 
-    }  
-  http.createServer(function (request, response) {
-     // Send the HTTP header 
-     // HTTP Status: 200 : OK
-     // Content Type: text/plain
-     const { Pool, Client } = require('pg');
+/**
+ * @author KillerDucks <https://github.com/KillerDucks>
+ */
+const { body,validationResult } = require('express-validator/check');
+const { sanitizeBody } = require('express-validator/filter');
+const bodyParser = require('body-parser');
+const express = require('express');
+const db_func = require('./database/db_connection.js')
 
-     const pool = new Pool({
-      user: 'alexa_admin',
-      host: 'alexainstance.cl7vk3upzn2l.us-east-2.rds.amazonaws.com',
-      database: 'Alexa_Recording',
-      password: 'infmatx117',
-      port: 5432,
-    });
+const app = express();
+app.use(express.static('public'));
+app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
-     const moment = require('moment');
-     var now = moment();
-     var formatted = now.format('YYYY-MM-DD HH:mm:ss Z');
+let clientSockets = [];
+ 
+setInterval(() => {
+    //Heartbeat Check code....
+}, 5000); // Check Every 5 Seconds 
 
-     const uuidv1 = require('uuid/v1');
-     var mtg_id = uuidv1(); 
-
-     const query = {
-      text: 'INSERT INTO meeting(id, mtg_time, name) VALUES($1, $2, $3)',
-      values: [mtg_id, formatted, 'test'],
-    };
-
-    pool.query(query, (err, res) => {
-      if (err) {
-        console.log(err.stack)
-      } else {
-        console.log(res.rows[0])
-      }
-    });
-     // Send the response body as "Hello World"
-
-    response.writeHeader(200, {"Content-Type": "text/html"});  
-    response.write(html+'<script>document.getElementById("change-me").innerHTML="Meeting ID: '+mtg_id+'"</script>');  
-    response.end();
-   }).listen(8080);
+app.get("/", (req, res) => {
+    res.sendFile(`${__dirname}/public/index.html`);
 });
-  // Console will print the message
-  console.log('Server running at http://127.0.0.1:8080/');
+
+// app.get("/create_mtg", (req, res) => {
+//     res.sendFile(`${__dirname}/public/mtg.html`);
+//     //   res.render('error', {
+//     //     data: {},
+//     //     errors: {}
+//     // })
+// });
+
+app.post("/create_mtg", (req, res) => {
+    sanitizeBody('mtg_name').trim().escape(),
+    body('mtg_name').isLength({ min: 1 }).trim().withMessage('Meeting Name Empty.')
+    .isAlpha().withMessage('Meeting Name Must Be Alphabet Letters.');
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        console.log(errors);
+        }
+    else {
+        db_func.createMtg(req.body.mtg_name);
+        res.sendFile(`${__dirname}/public/mtg.html`);
+    }
+});
+
+
+app.listen("8080", () => {
+    console.log("listening")
+});
 
 
