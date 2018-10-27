@@ -12,6 +12,8 @@ app.use(express.static('public'));
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.set('view engine', 'ejs');
+app.use(express.static(__dirname + 'public/static'));
 
 let clientSockets = [];
  
@@ -20,7 +22,7 @@ setInterval(() => {
 }, 5000); // Check Every 5 Seconds 
 
 app.get("/", (req, res) => {
-    res.sendFile(`${__dirname}/public/index.html`);
+    res.render("public/index");
 });
 
 // app.get("/create_mtg", (req, res) => {
@@ -42,7 +44,7 @@ app.post("/create_mtg", (req, res) => {
         }
     else {
         db_func.createMtg(req.body.mtg_name);
-        res.sendFile(`${__dirname}/public/mtg.html`);
+        res.render("public/mtg", {mtg_name: req.body.mtg_name});
     }
 });
 

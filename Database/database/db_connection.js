@@ -1,7 +1,8 @@
  
 exports.createMtg = function (mtg_name){
   const { Pool, Client } = require('pg');
-  const moment = require('moment');
+  const moment = require('moment-timezone');
+
   
      const pool = new Pool({
       user: 'alexa_admin',
@@ -11,7 +12,7 @@ exports.createMtg = function (mtg_name){
       port: 5432,
     });
    
-     var now = moment().format();
+     var now = moment().tz("America/Los_Angeles").format();
      // var formatted = now.format('YYYY-MM-DD HH:mm:ss Z');
 
      const uuidv1 = require('uuid/v1');
