@@ -8,12 +8,10 @@ const express = require('express');
 const db_func = require('./database/db_connection.js')
 
 const app = express();
-app.use(express.static('public'));
-app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.set('view engine', 'ejs');
-app.use(express.static(__dirname + 'public/static'));
+app.use(express.static(__dirname + '/views/public/static'));
 
 let clientSockets = [];
  
@@ -24,14 +22,6 @@ setInterval(() => {
 app.get("/", (req, res) => {
     res.render("public/index");
 });
-
-// app.get("/create_mtg", (req, res) => {
-//     res.sendFile(`${__dirname}/public/mtg.html`);
-//     //   res.render('error', {
-//     //     data: {},
-//     //     errors: {}
-//     // })
-// });
 
 app.post("/create_mtg", (req, res) => {
     sanitizeBody('mtg_name').trim().escape(),
