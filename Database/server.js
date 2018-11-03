@@ -8,10 +8,12 @@ const express = require('express');
 const db_func = require('./database/db_connection.js')
 
 const app = express();
+app.use(express.static('public'));
+app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.set('view engine', 'ejs');
-app.use(express.static(__dirname + '/views/public/static'));
+app.use(express.static(__dirname + 'public/static'));
 
 let clientSockets = [];
  
@@ -33,8 +35,11 @@ app.post("/create_mtg", (req, res) => {
         console.log(errors);
         }
     else {
-        db_func.createMtg(req.body.mtg_name);
-        res.render("public/mtg", {mtg_name: req.body.mtg_name});
+        console.log('Saving meeting name to DB...')
+        let render_mtg_name = function (mtg_name){
+            res.render("public/mtg", {mtg_name: mtg_name});
+        }
+        db_func.createMtg(req.body.mtg_name, render_mtg_name);
     }
 });
 
