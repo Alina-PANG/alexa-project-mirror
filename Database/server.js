@@ -1,31 +1,31 @@
 /**
  * @author KillerDucks <https://github.com/KillerDucks>
  */
-const { body,validationResult } = require('express-validator/check');
-const { sanitizeBody } = require('express-validator/filter');
-const bodyParser = require('body-parser');
-const express = require('express');
-const db_func = require('./database/db_connection.js')
+ const { body,validationResult } = require('express-validator/check');
+ const { sanitizeBody } = require('express-validator/filter');
+ const bodyParser = require('body-parser');
+ const express = require('express');
+ const db_func = require('./database/db_connection.js')
 
-const app = express();
-app.use(express.static('public'));
-app.use(express.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-app.set('view engine', 'ejs');
-app.use(express.static(__dirname + 'public/static'));
+ const app = express();
+ app.use(express.static('public'));
+ app.use(express.json());
+ app.use(bodyParser.urlencoded({ extended: true }));
+ app.use(bodyParser.json());
+ app.set('view engine', 'ejs');
+ app.use(express.static(__dirname + 'public/static'));
 
-let clientSockets = [];
+ let clientSockets = [];
  
-setInterval(() => {
+ setInterval(() => {
     //Heartbeat Check code....
 }, 5000); // Check Every 5 Seconds 
 
-app.get("/", (req, res) => {
+ app.get("/", (req, res) => {
     res.render("public/index");
 });
 
-app.post("/create_mtg", (req, res) => {
+ app.post("/create_mtg", (req, res) => {
     sanitizeBody('mtg_name').trim().escape(),
     body('mtg_name').isLength({ min: 1 }).trim().withMessage('Meeting Name Empty.')
     .isAlpha().withMessage('Meeting Name Must Be Alphabet Letters.');
@@ -33,7 +33,7 @@ app.post("/create_mtg", (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         console.log(errors);
-        }
+    }
     else {
         console.log('Saving meeting name to DB...')
         let render_mtg_name = function (mtg_name){
@@ -43,8 +43,15 @@ app.post("/create_mtg", (req, res) => {
     }
 });
 
+ app.get("/show_all_mtg", (req, res) => {
+    let render_mtgs = function(result){
+        res.render("public/all_mtg", {meetings: result});
+    }
+    db_func.showAllMtg(render_mtgs);
+});
 
-app.listen("8080", () => {
+
+ app.listen("8080", () => {
     console.log("listening")
 });
 

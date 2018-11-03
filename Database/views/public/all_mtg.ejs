@@ -1,0 +1,33 @@
+<!-- /**
+ * @author Hangzhi Pang
+ */ -->
+
+ <!DOCTYPE html>
+ <html lang="">
+ <head>
+    <meta charset="utf-8">
+    <title>Meeting</title>
+</head>
+<body>    
+    <section id="table">
+        <div class="table">
+            <table>
+                <tr>
+                    <th>Code</th>
+                    <th>Name</th>
+                    <th>Time</th>
+                </tr>
+                <% for(var i = 0; i < meetings.rows.length; i++) { %>
+                <tr>
+                    <td><%= meetings.rows[i].mtg_code %></td>
+                    <td><%= meetings.rows[i].name %></td>
+                    <td><%= meetings.rows[i].mtg_time %></td>
+                </tr>
+                <% } %> 
+            </table>
+        </div>
+    </section>
+</body>
+<footer>
+</footer>
+</html>

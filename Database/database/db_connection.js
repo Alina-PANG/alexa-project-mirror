@@ -7,7 +7,7 @@
       port: 5432,
     });
 
-exports.showAllMtg = function(){
+exports.showAllMtg = function(callback){
   const query_show_all_mtg = {
     text: 'SELECT * FROM meeting'
     }
@@ -16,17 +16,16 @@ exports.showAllMtg = function(){
       if (err) {
         console.log("error in pool"+err.stack)
       } else {
-        console.log("successed in retrieving all meetings from the Database:")
-        console.log(res);
-        return res;
+        console.log("successed in retrieving all meetings from the Database.")
+        // console.log(res);
+        callback(res);
       }
     });
 }
 
 exports.createMtg = function (mtg_name, callback){
-    const moment = require('moment-timezone');
+     const moment = require('moment-timezone');
      var now = moment().tz("America/Los_Angeles").format();
-     // var formatted = now.format('YYYY-MM-DD HH:mm:ss Z');
 
      const uuidv1 = require('uuid/v1');
      var mtg_id = uuidv1(); 
