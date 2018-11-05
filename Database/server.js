@@ -31,15 +31,23 @@
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        console.log(errors);
+        console.log(__dirname+": "+errors);
     }
     else {
-        console.log('Saving meeting name to DB...')
-        let render_mtg_name = function (mtg_name){
-            res.render("public/mtg", {mtg_name: mtg_name});
+        console.log(__dirname+': Saving meeting name to DB...')
+        let render_mtg_name = function (mtg_name, mtg_id){
+            res.render("public/mtg", {mtg_name: mtg_name, mtg_id:mtg_id});
         }
         db_func.createMtg(req.body.mtg_name, req.body.mtg_code, render_mtg_name);
     }
+});
+
+app.post("/:mtg_id/create_audio", (req, res) => {
+    let create_audio = function (audio_url){
+        // res.render("public/mtg", {audio_url: audio_url});
+    }
+    console.log(__dirname+': Saving audio name to DB with mtg_id '+ req.params.mtg_id+' ...')
+    db_func.createAudio(req.params.mtg_id, req.body.audio_url, create_audio);
 });
 
  app.get("/show_all_mtg", (req, res) => {
@@ -58,7 +66,7 @@ app.post('/show_audios', (req, res) => {
 
 
  app.listen("8080", () => {
-    console.log("listening")
+    console.log(__dirname+": Listening on localhost 8080...")
 });
 
 

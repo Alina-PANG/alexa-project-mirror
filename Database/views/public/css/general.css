@@ -4,6 +4,8 @@ body{
 	display: flex;
 	font-family: 'Quicksand';
 	border: 0px;
+	padding-left: 5%;
+	padding-right: 5%;
 }
 button {
 	color: white;

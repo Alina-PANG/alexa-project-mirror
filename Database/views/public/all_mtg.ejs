@@ -28,14 +28,14 @@
 	 						<form action="/show_audios" method="post">
 	 							<input style="display:none;" id="mtg_id" type="text" name="mtg_id" value=<%= meetings.rows[i].id %>>
 	 							<button type="submit" class="accordion"
-	 							id=<%= btn_id %>Audios</button>
+	 							id=<%= btn_id %>>Audios</button>
 	 						</form>
 	 					</td>
 	 				</tr>
  					<% var tr_id = "acc_tr_"+ meetings.rows[i].id %>
-	 				<tr class="panel" id=<%= tr_id %>>
+<!-- 	 				<tr class="panel" id=<%= tr_id %>>
 	 					<td colspan="5">Loading Audio Data...</td>
-	 				</tr>
+	 				</tr> -->
  				<% } %> 
  			</table>
  		</div>

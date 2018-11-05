@@ -8,17 +8,17 @@
  	<meta charset="utf-8">
  	<title>Meeting</title>
  	<link rel="stylesheet" type="text/css" href="/css/general.css">
- 	<link rel="stylesheet" type="text/css" href="/css/all_mtg.css">
+ 	<link rel="stylesheet" type="text/css" href="/css/audios.css">
 
  </head>
  <body>    
  	<section style="width: 100%;">
  		<div>
  			<table style="width: 100%;">
- 				<h1>'Meeting ID: '<%= mtg_id %></h1>
+ 				<h1>Meeting ID: <%= mtg_id %></h1>
  				<% for(var i = 0; i < audios.rows.length; i++) { %>
 	 				<tr>
-	 					<td><%= audios.rows[i].id %></td>
+	 					<td><%= i+1 %></td>
 	 					<td><%= audios.rows[i].audio_url %></td>
 	 				</tr>
  				<% } %> 

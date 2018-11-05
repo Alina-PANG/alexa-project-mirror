@@ -23,17 +23,17 @@ exports.showAllMtg = function(callback){
     });
 }
 
-exports.insertAudio = function(audio_url, callback){
+exports.createAudio = function(mtg_id, audio_url, callback){
   const query_insert_audio = {
-    text: 'INSERT INTO recorded_audio(audio_url) VALUES($1)',
-    values: [audio_url]
+    text: 'INSERT INTO recorded_audio(mtg_id, audio_url) VALUES($1, $2)',
+    values: [mtg_id, audio_url]
   };
-    pool.query(query_insert_mtg, (err, res) => {
+    pool.query(query_insert_audio, (err, res) => {
       if (err) {
         console.log("error in pool"+err.stack)
       } else {
-        console.log("successed in inserting audio with url: "+audio_url+"into the Database.")
-        callback('success');
+        console.log("successed in inserting audio with url: "+audio_url+" into the Database.")
+        callback(audio_url);
       }
     });
 }
@@ -46,6 +46,7 @@ exports.showAllAudio = function(mtg_id, callback){
       if (err) {
         console.log("error in pool"+err.stack)
       } else {
+        console.log("successed in retrieving audios from the Database.")
         callback(mtg_id, res);
       }
     });
@@ -68,7 +69,7 @@ exports.createMtg = function (mtg_name, mtg_code, callback){
         console.log("error in pool"+err.stack)
       } else {
         console.log("successed in inserting meeting with ID: "+mtg_id+", Name: "+mtg_name+" into the Database.")
-        callback(mtg_name);
+        callback(mtg_name, mtg_id);
       }
     });
 };
