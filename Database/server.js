@@ -1,19 +1,18 @@
 /**
- * @author KillerDucks <https://github.com/KillerDucks>
+ * @author Hangzhi Pang
  */
  const { body,validationResult } = require('express-validator/check');
  const { sanitizeBody } = require('express-validator/filter');
  const bodyParser = require('body-parser');
  const express = require('express');
+ const app = express();
  const db_func = require('./database/db_connection.js')
 
- const app = express();
- app.use(express.static('public'));
  app.use(express.json());
  app.use(bodyParser.urlencoded({ extended: true }));
  app.use(bodyParser.json());
  app.set('view engine', 'ejs');
- app.use(express.static(__dirname + 'public/static'));
+ app.use(express.static(__dirname + '/views/public'));
 
  let clientSockets = [];
  
@@ -39,15 +38,22 @@
         let render_mtg_name = function (mtg_name){
             res.render("public/mtg", {mtg_name: mtg_name});
         }
-        db_func.createMtg(req.body.mtg_name, render_mtg_name);
+        db_func.createMtg(req.body.mtg_name, req.body.mtg_code, render_mtg_name);
     }
 });
 
  app.get("/show_all_mtg", (req, res) => {
-    let render_mtgs = function(result){
-        res.render("public/all_mtg", {meetings: result});
+    let render_mtgs = function(mtgs){
+        res.render("public/all_mtg", {meetings: mtgs});
     }
     db_func.showAllMtg(render_mtgs);
+});
+
+app.post('/show_audios', (req, res) => {
+    let render_audios = function(mtg_id, audios){
+        res.render("public/audios", {mtg_id: mtg_id, audios: audios});
+    }
+    db_func.showAllAudio(req.body.mtg_id, render_audios);
 });
 
 

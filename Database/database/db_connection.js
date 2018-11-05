@@ -9,7 +9,7 @@
 
 exports.showAllMtg = function(callback){
   const query_show_all_mtg = {
-    text: 'SELECT * FROM meeting'
+    text: "SELECT id, mtg_code, name, TO_CHAR(mtg_time AT TIME ZONE 'PDT', 'Mon DD, YYYY|HH12:MI') mtg_timing FROM meeting"
     }
 
     pool.query(query_show_all_mtg, (err, res) => {
@@ -23,16 +23,44 @@ exports.showAllMtg = function(callback){
     });
 }
 
-exports.createMtg = function (mtg_name, callback){
-     const moment = require('moment-timezone');
-     var now = moment().tz("America/Los_Angeles").format();
+exports.insertAudio = function(audio_url, callback){
+  const query_insert_audio = {
+    text: 'INSERT INTO recorded_audio(audio_url) VALUES($1)',
+    values: [audio_url]
+  };
+    pool.query(query_insert_mtg, (err, res) => {
+      if (err) {
+        console.log("error in pool"+err.stack)
+      } else {
+        console.log("successed in inserting audio with url: "+audio_url+"into the Database.")
+        callback('success');
+      }
+    });
+}
+
+exports.showAllAudio = function(mtg_id, callback){
+  const query_show_all_audio = {
+    text: "SELECT * FROM recorded_audio WHERE mtg_id= '"+mtg_id+"';"
+  };
+    pool.query(query_show_all_audio, (err, res) => {
+      if (err) {
+        console.log("error in pool"+err.stack)
+      } else {
+        callback(mtg_id, res);
+      }
+    });
+}
+
+exports.createMtg = function (mtg_name, mtg_code, callback){
+     const moment = require('moment');
+     var now = moment().format();
 
      const uuidv1 = require('uuid/v1');
      var mtg_id = uuidv1(); 
 
      const query_insert_mtg = {
       text: 'INSERT INTO meeting(id, mtg_time, name, user_id, mtg_code) VALUES($1, $2, $3, $4, $5)',
-      values: [mtg_id, now, mtg_name, 1, 'test'],
+      values: [mtg_id, now, mtg_name, 1, mtg_code],
     };
     
     pool.query(query_insert_mtg, (err, res) => {
