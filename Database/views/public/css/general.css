@@ -8,6 +8,8 @@ body{
 	padding-right: 5%;
 }
 button {
+	margin-bottom: 10px;
+    margin-top: 10px;
 	color: white;
     background-color: #9530a7;
     padding: 11px;

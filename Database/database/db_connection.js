@@ -9,14 +9,14 @@
 
 exports.showAllMtg = function(callback){
   const query_show_all_mtg = {
-    text: "SELECT id, mtg_code, name, TO_CHAR(mtg_time AT TIME ZONE 'PDT', 'Mon DD, YYYY|HH12:MI') mtg_timing FROM meeting"
+    text: "SELECT id, mtg_code, name, TO_CHAR(mtg_time AT TIME ZONE 'PDT', 'Mon DD, YYYY|HH24:MI') mtg_timing FROM meeting"
     }
 
     pool.query(query_show_all_mtg, (err, res) => {
       if (err) {
-        console.log("error in pool"+err.stack)
+        console.log(__dirname+": error in pool"+err.stack)
       } else {
-        console.log("successed in retrieving all meetings from the Database.")
+        console.log(__dirname+": successed in retrieving all meetings from the Database.")
         // console.log(res);
         callback(res);
       }
@@ -30,9 +30,9 @@ exports.createAudio = function(mtg_id, audio_url, callback){
   };
     pool.query(query_insert_audio, (err, res) => {
       if (err) {
-        console.log("error in pool"+err.stack)
+        console.log(__dirname+": error in pool"+err.stack)
       } else {
-        console.log("successed in inserting audio with url: "+audio_url+" into the Database.")
+        console.log(__dirname+": successed in inserting audio with url: "+audio_url+" into the Database.")
         callback(audio_url);
       }
     });
@@ -44,9 +44,9 @@ exports.showAllAudio = function(mtg_id, callback){
   };
     pool.query(query_show_all_audio, (err, res) => {
       if (err) {
-        console.log("error in pool"+err.stack)
+        console.log(__dirname+": error in pool"+err.stack)
       } else {
-        console.log("successed in retrieving audios from the Database.")
+        console.log(__dirname+": successed in retrieving audios from the Database.")
         callback(mtg_id, res);
       }
     });
@@ -66,9 +66,9 @@ exports.createMtg = function (mtg_name, mtg_code, callback){
     
     pool.query(query_insert_mtg, (err, res) => {
       if (err) {
-        console.log("error in pool"+err.stack)
+        console.log(__dirname+": error in pool"+err.stack)
       } else {
-        console.log("successed in inserting meeting with ID: "+mtg_id+", Name: "+mtg_name+" into the Database.")
+        console.log(__dirname+": successed in inserting meeting with ID: "+mtg_id+", Name: "+mtg_name+" into the Database.")
         callback(mtg_name, mtg_id);
       }
     });

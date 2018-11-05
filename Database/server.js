@@ -14,12 +14,6 @@
  app.set('view engine', 'ejs');
  app.use(express.static(__dirname + '/views/public'));
 
- let clientSockets = [];
- 
- setInterval(() => {
-    //Heartbeat Check code....
-}, 5000); // Check Every 5 Seconds 
-
  app.get("/", (req, res) => {
     res.render("public/index");
 });
