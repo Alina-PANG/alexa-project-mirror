@@ -3,6 +3,7 @@
  */
 
 const express = require('express');
+const fileUpload = require('express-fileupload');
 const app = express();
 
 const WebSocket = require('ws');
@@ -23,16 +24,14 @@ app.get("/", (req, res) => {
     res.sendFile(`${__dirname}/public/index.html`);
 });
 
-app.use(express.json());
+// state changer
 app.post("/request", (req, res) => {
-    console.log(req.body);
     clientSockets.forEach((socket) => {
-        console.log('socket ID: ' + socket.ID + ', body.ID: ' + req.body.ID) + '\n';
-        if(socket.ID == req.body.ID){
+        if(socket.ID == req.query.ID){
             socket.WebSocket.send(JSON.stringify(
                 {
                     type: "EchoRequest", 
-                    state: req.body.state // Stop, Start, Pause, etc......
+                    state: req.query.state // Stop, Start, Pause, etc......
                 }
             )); // Change this to suit needs
         }
@@ -40,6 +39,26 @@ app.post("/request", (req, res) => {
     res.send("OKAY");
 });
 
+// file upload
+app.use(fileUpload());
+
+app.post('/upload', function(req, res) {
+    console.log(req);
+    if(Object.keys(req.files).length == 0) {
+        return res.status(400).send('No files were uploaded.');
+    }
+
+    // The name of input field
+    let sampleFile = req.files.sampleFile;
+    console.log(sampleFile);
+    let fileName = sampleFile.name;
+    sampleFile.mv('./audioclips/' + fileName, function(err) {
+        if(err)
+            return res.status(500).send(err);
+
+        res.send('File uploaded!');
+    });
+});
 
 app.listen("8080", () => {
     console.log("listening")
