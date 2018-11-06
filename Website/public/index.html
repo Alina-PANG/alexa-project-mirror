@@ -25,22 +25,41 @@
             <div class="container">
                 <h1>MeetingX</h1>
                 <p id="changeME">Meeting ID: ????</p>
-                <p id="state">State: Unknown</p>
+                <p id="state" style="display: none;">Ready</p>
             </div>
         </div>
         
         
         <div class="container">
-            
-           <center><button type="button" class="btn btn-default">Start/Stop Recording</button></center>
+            <section class="main-controls">
+                <canvas class="visualizer" height="60px"></canvas>
+                <div id="buttons">
+                  <button class="record">Record</button>
+                  <button class="stop">Stop</button>
+                  <button class="hold">Hold</button>
+                  <button class="clip30">Clip 30</button>
+                  <button class="clip60">Clip 60</button>
+                </div>
+              </section>
+        
+              <section class="sound-clips">
+              <!-- sound clips appended here through javascript-->    
+              </section>
             
         </div>
+
+  
         
         <!-- jQuery -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <!-- Bootstrap JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        
+        
         <!-- Our Code -->
-        <script src="./frontend.js"></script>
+        <script src="scripts/frontend.js"></script>
+        <script src="scripts/audiobuffer-slice.js"></script>
+        <script src="scripts/app.js"></script>
+
     </body>
 </html>

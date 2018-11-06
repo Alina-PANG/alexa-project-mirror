@@ -25,13 +25,15 @@ app.get("/", (req, res) => {
 });
 
 // state changer
+app.use(express.json());
 app.post("/request", (req, res) => {
+    console.log(req.body);
     clientSockets.forEach((socket) => {
-        if(socket.ID == req.query.ID){
+        if(socket.ID == req.body.ID){
             socket.WebSocket.send(JSON.stringify(
                 {
                     type: "EchoRequest", 
-                    state: req.query.state // Stop, Start, Pause, etc......
+                    state: req.body.state // Stop, Start, Pause, etc......
                 }
             )); // Change this to suit needs
         }
@@ -41,6 +43,7 @@ app.post("/request", (req, res) => {
 
 // file upload
 app.use(fileUpload());
+app.use(express.static('audioclips'));
 
 app.post('/upload', function(req, res) {
     console.log(req);

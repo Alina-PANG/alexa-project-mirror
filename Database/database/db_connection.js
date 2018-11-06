@@ -9,7 +9,7 @@
 
 exports.showAllMtg = function(callback){
   const query_show_all_mtg = {
-    text: "SELECT id, mtg_code, name, TO_CHAR(mtg_time AT TIME ZONE 'PDT', 'Mon DD, YYYY|HH24:MI') mtg_timing FROM meeting"
+    text: "SELECT id, mtg_code, name, TO_CHAR(mtg_time AT TIME ZONE 'PDT', 'Mon DD, YYYY|HH24:MI') mtg_timing FROM meeting ORDER BY mtg_time DESC;"
     }
 
     pool.query(query_show_all_mtg, (err, res) => {
@@ -23,7 +23,7 @@ exports.showAllMtg = function(callback){
     });
 }
 
-exports.createAudio = function(mtg_id, audio_url, callback){
+exports.createAudio = function(mtg_id, audio_url){
   const query_insert_audio = {
     text: 'INSERT INTO recorded_audio(mtg_id, audio_url) VALUES($1, $2)',
     values: [mtg_id, audio_url]
@@ -33,7 +33,7 @@ exports.createAudio = function(mtg_id, audio_url, callback){
         console.log(__dirname+": error in pool"+err.stack)
       } else {
         console.log(__dirname+": successed in inserting audio with url: "+audio_url+" into the Database.")
-        callback(audio_url);
+        // callback(audio_url);
       }
     });
 }
