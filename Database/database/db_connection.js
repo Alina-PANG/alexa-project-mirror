@@ -68,8 +68,8 @@ exports.createMtg = function (mtg_name, mtg_code, callback){
       if (err) {
         console.log(__dirname+": error in pool"+err.stack)
       } else {
-        console.log(__dirname+": successed in inserting meeting with ID: "+mtg_id+", Name: "+mtg_name+" into the Database.")
-        callback(mtg_name, mtg_id);
+        console.log(__dirname+": successed in inserting meeting with ID: "+mtg_id+", Name: "+mtg_name+", code: "+mtg_code+" into the Database.")
+        callback(mtg_name, mtg_id, mtg_code);
       }
     });
 };

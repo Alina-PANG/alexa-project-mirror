@@ -113,10 +113,10 @@ function guidGenerator() {
     }
     else {
         console.log(__dirname+': Saving meeting name to DB...')
-        let render_mtg_name = function (mtg_name, mtg_id){
-            res.render("public/mtg_record", {mtg_name: mtg_name, mtg_id:mtg_id});
+        let render_mtg_name = function (mtg_name, mtg_id, mtg_code){
+            res.render("public/mtg_record", {mtg_name: mtg_name, mtg_id:mtg_id ,mtg_code: mtg_code});
         }
-        db_func.createMtg(req.body.mtg_name, req.body.mtg_code, render_mtg_name);
+        db_func.createMtg(req.body.mtg_name, guidGenerator(), render_mtg_name);
     }
 });
 

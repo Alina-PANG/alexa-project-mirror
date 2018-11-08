@@ -1,0 +1,37 @@
+<!-- /**
+ * @author Hangzhi Pang
+ */ -->
+
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+    <meta charset="utf-8">
+    <title>Meeting</title>
+
+    <link rel="stylesheet" type="text/css" href="/css/general.css">
+    <link rel="stylesheet" type="text/css" href="/css/index.css">
+</head>
+<body>    
+    <div>
+        <div>
+            
+        </div>
+        <div>
+            <form action="/create_mtg" method="post">
+            <div class="form_tr">
+                <label for="mtg_name">Enter a Meeting Name:</label>
+                <input id="mtg_name" type="text" name="mtg_name" placeholder="Meeting Name">
+            </div>
+                <button id="start_mtg" type="submit">Start the Meeting</button>
+            </form> 
+            <form action="/show_all_mtg" method="get">
+                <button type="submit"
+                id="show_all_mtg" />Show All Meetings</button>
+            </form>
+        </div>
+    </div>
+
+</body>
+<footer>
+</footer>
+</html>
