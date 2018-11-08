@@ -1,0 +1,85 @@
+body
+{
+    text-align: center;
+    font-family: 'Rubik', sans-serif;
+    color: white;
+    background-image: url("img/bg-1.png");
+    background-size: cover;
+}
+
+.navbar-brand img
+{
+    margin-left: 47%;
+    height: 5rem;
+    
+}
+
+.navbar i
+{
+    font-size: 5rem;
+}
+
+.dropdown-item
+{
+    font-size: 1.75rem;
+}
+
+.dropdown-menu
+{
+    
+}
+.main
+{
+    padding-top: 15rem;
+}
+
+.main h1
+{
+    font-size: 5rem;
+}
+
+.main p
+{
+    font-size: 2rem;
+}
+
+.form-group .input
+{
+    padding:  2rem 0 1.5rem 0;
+    margin-left: 24%;
+    inline-size: 60rem;
+}
+
+.form-group input
+{
+    font-size: 1.5rem;
+    padding: 2.3rem;
+}
+
+.container button
+{
+    font-size: 1.75rem;
+    color: white;
+    background-color: transparent;
+}
+
+#signup
+{
+    padding-top: 3rem;
+    font-size: 2rem;
+    font-weight: light;
+}
+
+#signup a
+{
+    text-decoration: none;
+    font-weight: bold;
+    color: white;
+}
+
+#signup a:hover
+{
+    font-weight: none;
+    text-decoration: underline;
+    color: lightgray;
+}
