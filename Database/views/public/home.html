@@ -1,72 +1,37 @@
 <!-- /**
- * @author KillerDucks <https://github.com/KillerDucks>
+ * @author Hangzhi Pang
  */ -->
 
  <!DOCTYPE html>
  <html lang="en">
-     <head>
-         <meta charset="utf-8">
-         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-         <meta name="viewport" content="width=device-width, initial-scale=1">
-         <title>KnoCap</title>
- 
-         <!-- Bootstrap CSS -->
-         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-        <!-- CSS -->
-        <link href="/home.css" rel="stylesheet">
-        <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Rubik" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-     </head>
-     <body>        
-        <!-- Fixed Navbar -->
-        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-                <div class="container navbar-brand mx-auto">
-                    <img src="img/knocap-logo.png" alt="knocap-logo">
-                </div>
+ <head>
+    <meta charset="utf-8">
+    <title>Meeting</title>
 
-                <div class="navbar-collapse collapse mr-auto">
-                    <ul class="nav navbar-nav">
-                      <li class="nav-item dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="material-icons">menu</i></a>
-                        <ul class="dropdown-menu dropdown-menu-right">
-                          <li><a class="dropdown-item" href="#">Home</a></li>
-                          <li><a class="dropdown-item" href="#">Get Notes</a></li>
-                          <li><a class="dropdown-item" href="#">About Us</a></li>
-                        </ul>
-                      </li>
-                    </ul>
-                </div>
+    <link rel="stylesheet" type="text/css" href="/css/general.css">
+    <link rel="stylesheet" type="text/css" href="/css/index.css">
+</head>
+<body>    
+    <div>
+        <div>
             
-        </nav> 
-
-        <div class="container main">
-            <div class="container">
-                <h1> Makes Meeting Easier</h1>
-                <p>Note taking in a click of a button.</p>
-            </div>
-            <div class="form-group">
-                <div class="input"><input type="text" class="form-control" id="user" placeholder="Email"></div>
-                <div class="input"><input type="password" class="form-control" id="pwd" placeholder="Password"></div>
-            </div>
-            <div class="container">
-                <button type="submit" class="btn btn-default">Start a Meeting</button>
-            </div>
-            <div class="container" id="signup">
-                <p>Don't have an account? <a href="#">Sign Up</a></p>
-            </div>
         </div>
+        <div>
+            <form action="/create_mtg" method="post">
+            <div class="form_tr">
+                <label for="mtg_name">Enter a Meeting Name:</label>
+                <input id="mtg_name" type="text" name="mtg_name" placeholder="Meeting Name">
+            </div>
+                <button id="start_mtg" type="submit">Start the Meeting</button>
+            </form> 
+            <form action="/show_all_mtg" method="get">
+                <button type="submit"
+                id="show_all_mtg" />Show All Meetings</button>
+            </form>
+        </div>
+    </div>
 
-
-
-
-
-         <!-- jQuery -->
-         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-         <!-- Bootstrap JavaScript -->
-         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-         <!-- Our Code -->
-         <script src="./frontend.js"></script>
-     </body>
- </html>
- 
+</body>
+<footer>
+</footer>
+</html>
