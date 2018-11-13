@@ -74,6 +74,23 @@ exports.createMtg = function (mtg_name, mtg_code, callback){
     });
 };
 
+// Juwin
+exports.editMtgCode = function(mtg_id, mtg_code) {
+  const query_edit_code = {
+    text: "UPDATE meeting SET mtg_code = '"+mtg_code+"' WHERE id= '"+mtg_id+"';",
+    //text: 'INSERT INTO meeting(mtg_id, mtg_code) VALUES($1, $2)',
+    //values: [mtg_id, mtg_code],
+  };
+    pool.query(query_edit_code, (err, res) => {
+      if (err) {
+        console.log(__dirname+": error in pool"+err.stack)
+      } else {
+        console.log(__dirname+": successed in code with url: "+mtg_code+" into the Database.")
+      }
+    });
+
+}
+
 
 
 

@@ -29,7 +29,3 @@ socket.addEventListener('message', function(event) {
         console.log("changing")
     }
 });
-
-
-
-// Speech Code

@@ -8,7 +8,7 @@
  const express = require('express');
  const app = express();
  const db_func = require('./database/db_connection.js')
-const WebSocket = require('ws');
+ const WebSocket = require('ws');
 
  app.use(express.json());
  app.use(bodyParser.urlencoded({ extended: true }));
@@ -57,42 +57,67 @@ app.post('/upload', function(req, res) {
 
     // The name of input field
     let sampleFile = req.files.sampleFile;
-    console.log(sampleFile);
     let fileName = sampleFile.name;
+    let meetingID = fileName.split('_')[0];
+
     sampleFile.mv('./audioclips/' + fileName, function(err) {
         if(err)
             return res.status(500).send(err);
 
         res.send('File uploaded!');
     });
+
+    // file is uploaded, push link to DB
+    // TODO: need domain to get URL
+    let URL = `http://localhost:8080/audioclips/${fileName}`;
+    db_func.createAudio(meetingID, URL);
 });
 
 
-// // websocket server, on connection generate ID and send display on front end
-// wss.on('connection', function connection(ws) {
-//     const id = guidGenerator();
-//     let tmp = {
-//         ID: id,
-//         WebSocket: ws
-//     };
-//     clientSockets.push(tmp);
-//     ws.on('message', function incoming(message) {
-//       console.log('received: %s', message);
-//     });
-//     console.log("connected client")
-//     ws.send(JSON.stringify(
-//         {
-//             type: "Initial", 
-//             state: null,
-//             data: id
-//         }
-//     ));
-//     console.log(clientSockets);
-// });
+//JSON check
+function isJSON(str) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
+}
+
+// websocket server, on connection generate ID and send display on front end
+wss.on('connection', function connection(ws) {
+     const id = guidGenerator();
+     let tmp = {
+         ID: id,
+         WebSocket: ws
+     };
+     clientSockets.push(tmp);
+
+     ws.on('message', function incoming(message) {
+       console.log('received: %s', message);
+       if(isJSON(message)){
+           let data = JSON.parse(message);
+           if(data.type == 'UpdateDB'){
+               db_func.editMtgCode(data.meetingID, data.code);
+           } 
+       }
+     });
+     console.log("connected client")
+
+     ws.send(JSON.stringify(
+         {
+             type: "Initial", 
+             state: null,
+             data: id
+         }
+     ));
+     console.log(clientSockets);
+});
+
 
 function guidGenerator() {
     var S4 = function() {
-        return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+        return Math.floor(((1+Math.random())*0x10000)|0).toString(16).substring(1);
     };
     return (S4());
 }
@@ -116,7 +141,8 @@ function guidGenerator() {
         let render_mtg_name = function (mtg_name, mtg_id, mtg_code){
             res.render("public/mtg_record", {mtg_name: mtg_name, mtg_id:mtg_id ,mtg_code: mtg_code});
         }
-        db_func.createMtg(req.body.mtg_name, guidGenerator(), render_mtg_name);
+        db_func.createMtg(req.body.mtg_name, req.body.mtg_code, render_mtg_name);
+        //db_func.createMtg(req.body.mtg_name, req.body.mtg_code, render_mtg_name);
     }
 });
 

@@ -1,5 +1,5 @@
 // set up basic variables for app
-const db_func = require('../../../database/db_connection.js')
+//const db_func = require('../../../database/db_connection.js')
 // db_func.createAudio(mtg_id, audio_url)
 var record = document.querySelector('.record');
 var stop = document.querySelector('.stop');
@@ -9,6 +9,8 @@ var clip60 = document.querySelector('.clip60');
 var soundClips = document.querySelector('.sound-clips');
 var canvas = document.querySelector('.visualizer');
 var mainSection = document.querySelector('.main-controls');
+// get meeting id
+var meetID = document.getElementById('mtg_id').innerText.split(": ")[1];
 
 // disable stop button while not recording
 
@@ -205,9 +207,17 @@ if (navigator.mediaDevices.getUserMedia) {
           }
         
           function decodeDone(buffer) {
-            var secConvert = sec * 1000;
-            var begin = buffer.duration * 1000 - secConvert;
-            var end = buffer.duration * 1000;
+            var begin;
+            var end;
+            if(sec > buffer.duration){
+              begin = 0;
+              end = buffer.duration * 1000;
+            } else {
+              var secConvert = sec * 1000;
+              begin = buffer.duration * 1000 - secConvert;
+              end = buffer.duration * 1000;
+            }
+         
     
             audioBufferSlice(buffer, begin, end, function(error, slicedAudioBuffer) {
               if (error) {
@@ -216,10 +226,10 @@ if (navigator.mediaDevices.getUserMedia) {
                 source.buffer = slicedAudioBuffer;
     
                 var wavBlob = bufferToWave(source.buffer, source.buffer.length)
-                var newWav = new File([wavBlob], clipName + '.wav');
+                var newWav = new File([wavBlob], meetID + '_' + clipName + '.wav');
                 var formData = new FormData();
                 formData.append('sampleFile', newWav);
-                
+
                 var request = new XMLHttpRequest();
                 request.open('POST', 'http://localhost:8080/upload');
                 request.send(formData);
@@ -300,7 +310,7 @@ if (navigator.mediaDevices.getUserMedia) {
         var audioURL = window.URL.createObjectURL(blob);
         audio.src = audioURL;
 
-        var newOgg = new File([blob], clipName + '.wav');
+        var newOgg = new File([blob], meetID + '_' + clipName + '.wav');
         var formData = new FormData();
         formData.append('sampleFile', newOgg);
                 
