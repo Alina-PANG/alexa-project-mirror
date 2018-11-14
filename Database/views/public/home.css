@@ -1,19 +1,22 @@
+/*Body styling*/
 body
 {
     text-align: center;
     font-family: 'Rubik', sans-serif;
+    font-weight: 300;
     color: white;
     background-image: url("img/bg-1.png");
     background-size: cover;
 }
 
+/*KnoCap logo*/
 .navbar-brand img
 {
     margin-left: 47%;
     height: 5rem;
-    
 }
 
+/*Menu icon*/
 .navbar i
 {
     font-size: 5rem;
@@ -28,54 +31,84 @@ body
 {
     
 }
+
+/*Area under navbar*/
 .main
 {
     padding-top: 15rem;
 }
 
+/*"Makes Meeting Easier"*/
 .main h1
 {
     font-size: 5rem;
 }
 
+/*description*/
 .main p
 {
     font-size: 2rem;
 }
 
-.form-group .input
+/*input fields container*/
+.form-group
 {
-    padding:  2rem 0 1.5rem 0;
+    padding-top: 2rem;
     margin-left: 24%;
     inline-size: 60rem;
 }
 
+/*password field*/
+.form-group .password
+{
+    padding-top:  .5rem;
+    padding-bottom: 3rem;
+}
+
+/*input fields internal setting*/
 .form-group input
 {
     font-size: 1.5rem;
     padding: 2.3rem;
 }
 
+/*Start a meeting button*/
+.container button, .container button:hover
+{  
+    color: white;
+    background-color:transparent;
+}
+
 .container button
 {
     font-size: 1.75rem;
-    color: white;
-    background-color: transparent;
+    transition: all 0.5s ease;
+    transition-delay: 0.1s;
 }
 
+.container button:hover
+{
+    size: 35%;
+    font-size: 2rem;
+}
+
+/*sign up text*/
 #signup
 {
     padding-top: 3rem;
     font-size: 2rem;
-    font-weight: light;
 }
 
+/*link to sign up*/
 #signup a
 {
     text-decoration: none;
-    font-weight: bold;
+    font-weight: 400;
     color: white;
+    transition: all 0.5s ease;
+    transition-delay: 0.1s;
 }
+
 
 #signup a:hover
 {
