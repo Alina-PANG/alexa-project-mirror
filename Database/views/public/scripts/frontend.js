@@ -18,7 +18,19 @@ socket.addEventListener('message', function(event) {
         var elem = document.querySelector('#changeME');
         var html = elem.innerHTML;
         elem.innerHTML = "Meeting ID: " + data.data
-        console.log("changing")
+        
+        console.log("update the code")
+        // update DB
+        var meetID = document.getElementById('mtg_id').innerText.split(": ")[1];
+        socket.send(JSON.stringify(
+            {
+                type: "UpdateDB", 
+                meetingID: meetID,
+                code: data.data
+            }
+        ));
+        
+        console.log("changing");
     }
 
     if(data.type == "EchoRequest"){

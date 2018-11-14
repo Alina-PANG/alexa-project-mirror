@@ -96,6 +96,7 @@ wss.on('connection', function connection(ws) {
      ws.on('message', function incoming(message) {
        console.log('received: %s', message);
        if(isJSON(message)){
+           console.log('I am updating the code')
            let data = JSON.parse(message);
            if(data.type == 'UpdateDB'){
                db_func.editMtgCode(data.meetingID, data.code);
