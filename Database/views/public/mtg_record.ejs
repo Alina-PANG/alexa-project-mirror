@@ -1,45 +1,39 @@
 <!-- /**
  * @author KillerDucks <https://github.com/KillerDucks>
+ * @author Claudia Mastan
  */ -->
 
 <!DOCTYPE html>
-<html lang="">
+<html lang="en">
     <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Title Page</title>
-
-        <!-- Bootstrap CSS -->
-        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-
-        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-        <!--[if lt IE 9]>
-            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.3/html5shiv.js"></script>
-            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
+        <title>Record Meeting</title>
+        <% include ./partials/head %>
+        <!-- CSS -->
+        <link href="/css/record.css" type="text/css" rel="stylesheet">
     </head>
-    <body>        
-        <div class="jumbotron">
-            <div class="container">
-                <h1>Meeting <%= mtg_name %></h1>
-                <p id="mtg_id">Meeting ID: <%= mtg_id %></p>
-                <p id="changeME">Meeting Code: <%= mtg_code %></p>
-                <p id="state" style="display: none;">Ready</p>
-            </div>
+    <body>  
+        <% include ./partials/navbar %>      
+        
+        <div class="container main">
+            <h1>Meeting <%= mtg_name %></h1>
+            <p id="mtg_id">Meeting ID: <%= mtg_id %></p>
+            <p id="changeME">Meeting Code: <%= mtg_code %></p>
+            <p id="state" style="display: none;">Ready</p>
         </div>
+        
         
         
         <div class="container">
             <section class="main-controls">
                 <canvas class="visualizer" height="60px"></canvas>
                 <div id="buttons">
-                      <button type="submit" class="record">Record</button>
-                      <button class="stop">Stop</button>
-                      <button type="submit" class="hold">Hold</button>
-                      <button type="submit" class="clip30">Clip 30</button>
-                      <button type="submit" class="clip60">Clip 60</button>
+                    <ul class="list-inline">
+                    <!--<li class="list-inline-item">    <button type="submit" class="record">Record</button> </li>-->
+                    <li class="list-inline-item">    <button class="stop">Stop</button> </li>
+                    <li class="list-inline-item">    <button type="submit" class="hold">Hold</button> </li>
+                    <li class="list-inline-item">    <button type="submit" class="clip30">Clip 30</button> </li>
+                    <li class="list-inline-item">    <button type="submit" class="clip60">Clip 60</button> </li>
+                    </ul>
                 </div>
               </section>
         
@@ -49,11 +43,7 @@
             
         </div>
         
-        <!-- jQuery -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-        <!-- Bootstrap JavaScript -->
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-        
+        <% include ./partials/footer %>
         
         <!-- Our Code -->
         <script src="scripts/frontend.js"></script>
