@@ -3,6 +3,11 @@
 
 @import 'base.css';
 
+.main
+{
+    padding-top: 20rem;
+}
+
 .main h1
 {
     font-size: 5rem;
@@ -16,24 +21,12 @@
 
 #mtg_name
 {
-    height: 38px;
-    width: 294px;
+    height: 50px;
+    width: 350px;
     margin-top: 23px;
     margin-bottom: 23px;
     color: #111045;
-}
-
-#start_mtg, #show_all_mtg
-{
-    margin: 4px;
-    width: 174px;
-}
-
-.form-group .input
-{
-    padding:  2rem 0 1.5rem 0;
-    margin-left: 24%;
-    inline-size: 60rem;
+    padding-left: 1.5rem;
 }
 
 .form-group input
@@ -44,28 +37,38 @@
 
 .container button
 {
+    padding: 1.5rem 3rem 1.5rem 3rem;
     font-size: 1.75rem;
     color: white;
     background-color: transparent;
+    transition: 0.5s;
+    border-radius: 5px;
 }
 
-#signup
+.container button:hover
 {
-    padding-top: 3rem;
-    font-size: 2rem;
-    font-weight: light;
-}
-
-#signup a
-{
-    text-decoration: none;
-    font-weight: bold;
+    background-color: transparent;
+    size: 45%;
     color: white;
+    font-size: 1.85rem;
 }
 
-#signup a:hover
-{
-    font-weight: none;
-    text-decoration: underline;
-    color: lightgray;
+container .button:after {
+    content: "";
+    background: transparent;
+    display: block;
+    position: absolute;
+    padding-top: 300%;
+    padding-left: 350%;
+    margin-left: -20px!important;
+    margin-top: -120%;
+    opacity: 0;
+    transition: all 0.8s
+}
+
+container .button:active:after {
+    padding: 0;
+    margin: 0;
+    opacity: 1;
+    transition: 0s
 }

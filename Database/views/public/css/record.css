@@ -1,9 +1,9 @@
 @import 'base.css';
 
-.visualizer
+
+.main
 {
-    background-color: transparent;
-    padding: 4rem 0 4rem 0;
+    padding-top: 16rem;
 }
 
 .main h1
@@ -17,6 +17,13 @@
     font-size: 2rem;
     font-weight: 300;
 }
+
+.visualizer
+{
+    background-color: transparent;
+    padding: 4rem 0 4rem 0;
+}
+
 
 button
 {
