@@ -8,17 +8,20 @@
     padding-top: 20rem;
 }
 
+/*Makes Meeting Easier*/
 .main h1
 {
     font-size: 5rem;
 }
 
+/*note taking in a click of a button*/
 .main p
 {
     font-weight: 300;
     font-size: 2rem;
 }
 
+/*input box styling*/
 #mtg_name
 {
     height: 50px;
@@ -29,12 +32,14 @@
     padding-left: 1.5rem;
 }
 
+/*inside the input box styling*/
 .form-group input
 {
     font-size: 1.5rem;
     padding: 2.3rem;
 }
 
+/*Button styling*/
 .container button
 {
     padding: 1.5rem 3rem;
@@ -45,6 +50,7 @@
     border-radius: 1rem;
 }
 
+/*Button on hover*/
 .container button:hover
 {
     background-color: transparent;
@@ -53,6 +59,7 @@
     font-size: 1.85rem;
 }
 
+/*Button ripple effect*/
 container .button:after {
     content: "";
     background: transparent;
@@ -71,4 +78,10 @@ container .button:active:after {
     margin: 0;
     opacity: 1;
     transition: 0s
+}
+
+/*only if view meeting button not omitted*/
+.main #strtmt
+{
+    padding-bottom: 1.5rem;
 }

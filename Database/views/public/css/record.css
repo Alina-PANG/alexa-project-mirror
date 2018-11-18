@@ -1,16 +1,20 @@
+/* @author Claudia Mastan */
+
 @import 'base.css';
 
-
+/*space between Meeting and navbar*/
 .main
 {
     padding-top: 10rem;
 }
 
+/*Meeting*/
 .main h1
 {
     font-size: 6rem;
 }
 
+/*Meeting id and code*/
 .main p
 {
     margin-bottom: -.5rem;
@@ -18,17 +22,15 @@
     font-weight: 300;
 }
 
+/*Audio visualizer*/
 .visualizer
 {
     background-color: transparent;
     padding: 4rem 0 2rem;
 }
 
-.list-inline-item
-{
-    padding-right: 15rem;
-}
 
+/*Button styling*/
 .btn
 {
     padding: 1rem 3.5rem ;
@@ -38,23 +40,27 @@
     transition: 0.5s;
 }
 
+/*top buttons (record/stop)*/
+/*space between top and bottom buttons*/
 #top
 {
     padding-bottom: 2rem;
 }
 
+/*space between stop and record*/
 #top span
 {
     padding: 0 3rem;
 }
 
+/*rec & stop buttons*/
 #top .btn
 {
     border-radius: 1rem;
 }
 
 /*https://codepen.io/jnbruno/pen/vNpPpW*/
-
+/*Make round buttons*/
 .btn-circle.btn-xl {
     width: 100px;
     height: 100px;
@@ -64,11 +70,13 @@
     text-align: center;
 }
 
+/*space between stop and record*/
 #bottom span
 {
     padding: 0 1rem;
 }
 
+/*hold and clips buttons*/
 #bottom .btn
 {
     font-size: 2rem;
