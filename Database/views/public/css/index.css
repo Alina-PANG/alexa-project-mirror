@@ -37,12 +37,12 @@
 
 .container button
 {
-    padding: 1.5rem 3rem 1.5rem 3rem;
+    padding: 1.5rem 3rem;
     font-size: 1.75rem;
     color: white;
     background-color: transparent;
     transition: 0.5s;
-    border-radius: 5px;
+    border-radius: 1rem;
 }
 
 .container button:hover

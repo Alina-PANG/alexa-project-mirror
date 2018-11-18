@@ -26,14 +26,16 @@
         <div class="container">
             <section class="main-controls">
                 <canvas class="visualizer" height="60px"></canvas>
-                <div id="buttons">
-                    <ul class="list-inline">
-                    <!--<li class="list-inline-item">    <button type="submit" class="record">Record</button> </li>-->
-                    <li class="list-inline-item">    <button class="stop">Stop</button> </li>
-                    <li class="list-inline-item">    <button type="submit" class="hold">Hold</button> </li>
-                    <li class="list-inline-item">    <button type="submit" class="clip30">Clip 30</button> </li>
-                    <li class="list-inline-item">    <button type="submit" class="clip60">Clip 60</button> </li>
-                    </ul>
+                <div class="container" id ="buttons">
+                    <div id = "top">
+                    <span id= "rec"><button type="submit" class="record btn btn-default">Record</button></span>
+                    <span id= "stop"><button class="stop btn btn-default">Stop</button></span>
+                    </div>
+                    <div id="bottom">
+                    <span id= "hold"><button type="submit" class="hold btn btn-default btn-circle btn-xl">Hold</button></span>
+                    <span id= "clip30"><button type="submit" class="clip30 btn btn-default btn-circle btn-xl">Clip 30</button></span>
+                    <span id= "clip60"><button type="submit" class="clip60 btn btn-default btn-circle btn-xl">Clip 60</button></span>
+                    </div>
                 </div>
               </section>
         

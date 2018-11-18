@@ -3,7 +3,7 @@
 
 .main
 {
-    padding-top: 16rem;
+    padding-top: 10rem;
 }
 
 .main h1
@@ -21,18 +21,55 @@
 .visualizer
 {
     background-color: transparent;
-    padding: 4rem 0 4rem 0;
-}
-
-
-button
-{
-  border-radius: 5px;
-  font-size: 1.75rem;
-  background-color: transparent;
+    padding: 4rem 0 2rem;
 }
 
 .list-inline-item
 {
     padding-right: 15rem;
+}
+
+.btn
+{
+    padding: 1rem 3.5rem ;
+    font-size: 1.75rem;
+    color: white;
+    background-color: transparent;
+    transition: 0.5s;
+}
+
+#top
+{
+    padding-bottom: 2rem;
+}
+
+#top span
+{
+    padding: 0 3rem;
+}
+
+#top .btn
+{
+    border-radius: 1rem;
+}
+
+/*https://codepen.io/jnbruno/pen/vNpPpW*/
+
+.btn-circle.btn-xl {
+    width: 100px;
+    height: 100px;
+    padding: 10px 16px;
+    border-radius: 50%;
+    line-height: 1.33;
+    text-align: center;
+}
+
+#bottom span
+{
+    padding: 0 1rem;
+}
+
+#bottom .btn
+{
+    font-size: 2rem;
 }
