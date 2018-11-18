@@ -1,36 +1,7 @@
-body
-{
-    text-align: center;
-    font-family: 'Rubik', sans-serif;
-    color: white;
-    background-image: url("../img/bg-1.png");
-    background-size: cover;
-}
+/* @author Claudia Mastan */
 
-.navbar-brand img
-{
-    margin-left: 50%;
-    height: 5rem;
-    
-}
-.navbar i
-{
-    font-size: 5rem;
-}
 
-.dropdown-item
-{
-    font-size: 1.75rem;
-}
-
-.dropdown-menu
-{
-    
-}
-.main
-{
-    padding-top: 15rem;
-}
+@import 'base.css';
 
 .main h1
 {
@@ -41,18 +12,22 @@ body
 {
     font-size: 2rem;
 }
-#mtg_name{
-        height: 38px;
+
+#mtg_name
+{
+    height: 38px;
     width: 294px;
     margin-top: 23px;
     margin-bottom: 23px;
-        color: #111045;
+    color: #111045;
 }
-#start_mtg, #show_all_mtg{
-        margin: 4px;
+
+#start_mtg, #show_all_mtg
+{
+    margin: 4px;
     width: 174px;
 }
-}
+
 .form-group .input
 {
     padding:  2rem 0 1.5rem 0;

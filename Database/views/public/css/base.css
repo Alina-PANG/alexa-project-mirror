@@ -1,0 +1,35 @@
+/*body base styling*/
+body
+{
+    text-align: center;
+    font-family: 'Rubik', sans-serif;
+    color: white;
+    background-image: url("../img/bg-1.png");
+    background-size: cover;
+}
+
+/*KnoCap logo*/
+.navbar-brand img
+{
+    margin-left: 47%;
+    height: 5rem;
+    
+}
+
+/*Menu icon*/
+.navbar i
+{
+    font-size: 5rem;
+}
+
+
+.dropdown-item
+{
+    font-size: 1.75rem;
+    padding: 2rem;
+}
+
+.main
+{
+    padding-top: 15rem;
+}
