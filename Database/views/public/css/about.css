@@ -30,14 +30,14 @@ h1
 
 /*https://css-tricks.com/having-fun-with-link-hover-effects/*/
 
-a
+#show_mtg
 {
     color: white;
     text-decoration: underline;
     transition: 0.5s
 }
 
-a:hover
+#show_mtg:hover
 {
     background-color: white;
     color: #0a0849;
