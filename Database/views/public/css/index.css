@@ -3,6 +3,11 @@
 
 @import 'base.css';
 
+body
+{
+    background-image: url("../img/bg-1.png");
+}
+
 .main
 {
     padding-top: 20rem;
@@ -80,8 +85,9 @@ container .button:active:after {
     transition: 0s
 }
 
-/*only if view meeting button not omitted*/
+/*only if view meeting button not omitted
 .main #strtmt
 {
     padding-bottom: 1.5rem;
 }
+*/

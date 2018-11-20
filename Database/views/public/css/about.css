@@ -1,0 +1,53 @@
+/* @author Claudia Mastan */
+
+@import 'base.css';
+
+body
+{
+    background-image: url("../img/bg-3.png");
+    background-size: 100%;
+}
+
+.main, .text
+{
+    text-align: left;
+}
+
+.main
+{
+    padding-top: 15rem;
+}
+
+h1
+{
+    font-size: 4rem;
+}
+.text
+{
+    padding-top: 8rem;
+    padding-right: 60%;
+}
+
+/*https://css-tricks.com/having-fun-with-link-hover-effects/*/
+
+a
+{
+    color: white;
+    text-decoration: underline;
+    transition: 0.5s
+}
+
+a:hover
+{
+    background-color: white;
+    color: #0a0849;
+    text-decoration: none;
+    padding: 0 .5rem;
+}
+
+/*temporary, later need to put this as css*/
+#start
+{
+    padding-top:20rem;
+    width: 100%;
+}

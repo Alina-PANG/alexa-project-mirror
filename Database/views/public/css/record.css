@@ -3,6 +3,11 @@
 @import 'base.css';
 
 /*space between Meeting and navbar*/
+
+body
+{
+    background-image: url("../img/bg-2.png");
+}
 .main
 {
     padding-top: 10rem;

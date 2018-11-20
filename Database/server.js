@@ -128,6 +128,10 @@ function guidGenerator() {
     res.render("public/index");
 });
 
+ app.get("/about", (req, res) => {
+    res.render("public/about");
+});
+
  app.post("/create_mtg", (req, res) => {
     sanitizeBody('mtg_name').trim().escape(),
     body('mtg_name').isLength({ min: 1 }).trim().withMessage('Meeting Name Empty.')
@@ -168,7 +172,6 @@ app.post('/show_audios', (req, res) => {
     }
     db_func.showAllAudio(req.body.mtg_id, render_audios);
 });
-
 
  app.listen("8080", () => {
     console.log(__dirname+": Listening on localhost 8080...")

@@ -1,17 +1,20 @@
 /*body base styling*/
+body,html
+{
+    width: 100%;
+}
 body
 {
     text-align: center;
     font-family: 'Rubik', sans-serif;
     color: white;
-    background-image: url("../img/bg-1.png");
     background-size: cover;
 }
 
 /*KnoCap logo*/
 .navbar-brand img
 {
-    margin-left: 47%;
+    margin-left: 10%;
     height: 5rem;
     
 }
