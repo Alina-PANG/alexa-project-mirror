@@ -1,12 +1,46 @@
-@import url('https://fonts.googleapis.com/css?family=Quicksand');
+@import url('https://fonts.googleapis.com/css?family=Rubik');
 body{
 	margin: 0px;
 	display: flex;
-	font-family: 'Quicksand';
+	font-family: 'Rubik', sans-serif;
 	border: 0px;
 	padding-left: 5%;
 	padding-right: 5%;
 }
+
+/*Must clean up later*/
+/*KnoCap logo*/
+.navbar-brand img
+{
+    margin-left: 47%;
+    height: 5rem;
+    
+}
+
+/*Menu icon*/
+.navbar i
+{
+    font-size: 5rem;
+}
+
+/*dropdown menu*/
+.dropdown-item
+{
+    font-size: 1.75rem;
+    padding: 2rem;
+}
+
+.main
+{
+	padding-top: 12rem;
+}
+
+th
+{
+	font-size: 2rem;
+	padding-bottom: 3rem;
+}
+
 button {
 	margin-bottom: 10px;
     margin-top: 10px;
