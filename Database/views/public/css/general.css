@@ -16,7 +16,7 @@ body{
     height: 5rem;
     
 }
-div.meeting_info:hover{
+div.card:hover{
 	cursor: auto !important;
 }
 div.meeting_info_item{

@@ -38,6 +38,20 @@ exports.createAudio = function(mtg_id, audio_url){
     });
 }
 
+exports.cancelMtg = function(mtg_id, callback){
+  const query_cancel_mtg = {
+    text: "DELETE FROM meeting WHERE id= '"+mtg_id+"';"
+  };
+    pool.query(query_cancel_mtg, (err, res) => {
+      if (err) {
+        console.log(__dirname+": error in pool: "+err.stack)
+      } else {
+        console.log(__dirname+": successed in deleting meeting with ID "+mtg_id+".")
+        callback(res);
+      }
+    });
+}
+
 exports.showAllAudio = function(mtg_id, callback){
   const query_show_all_audio = {
     text: "SELECT * FROM recorded_audio WHERE mtg_id= '"+mtg_id+"';"

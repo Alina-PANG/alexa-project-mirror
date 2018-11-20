@@ -1,5 +1,5 @@
 <!-- /**
- * @author KillerDucks <https://github.com/KillerDucks>
+ * @author Hangzhi Pang
  * @author Claudia Mastan
  */ -->
 
@@ -28,6 +28,13 @@
                 <canvas class="visualizer" height="60px"></canvas>
                 <div class="container" id ="buttons">
                     <div id = "top">
+                    <% var href = "/cancel_mtg/" + mtg_id %>
+                    <span id= "rec">
+                        <form action=<%= href %> method="post" style="display: inline-block;">
+                                <button type="submit" class="record btn btn-default"
+                                >Cancel Meeting</button>
+                            </form>
+                    </span>
                     <span id= "rec"><button type="submit" class="record btn btn-default">Record</button></span>
                     <span id= "stop"><button class="stop btn btn-default">Stop</button></span>
                     </div>
