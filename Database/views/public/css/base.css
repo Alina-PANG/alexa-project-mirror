@@ -3,12 +3,18 @@ body,html
 {
     width: 100%;
 }
+
 body
 {
     text-align: center;
     font-family: 'Rubik', sans-serif;
     color: white;
     background-size: cover;
+}
+
+.navbar
+{
+    background-color: white;
 }
 
 /*KnoCap logo*/
