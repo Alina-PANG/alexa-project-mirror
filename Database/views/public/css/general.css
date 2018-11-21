@@ -16,7 +16,25 @@ body{
     height: 5rem;
     
 }
-
+div.card:hover{
+	cursor: auto !important;
+}
+div.meeting_info_item{
+	float:left;
+	width: 18%;
+}
+div.card{
+	    padding-top: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+div.card:nth-child(2n){
+	background-color: #fafafa;
+}
+.meeting_info_btn{
+	position: relative;
+    bottom: 14px;
+}
 /*Menu icon*/
 .navbar i
 {

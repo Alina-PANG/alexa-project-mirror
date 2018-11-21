@@ -202,6 +202,13 @@ function guidGenerator() {
     db_func.showAllMtg(render_mtgs);
 });
 
+app.post("/cancel_mtg/:mtg_id", (req, res) => {
+    let render_mtgs = function(){
+        res.render("public/index");
+    }
+    db_func.cancelMtg(req.params.mtg_id, render_mtgs);
+});
+
 app.post('/show_audios', (req, res) => {
     let render_audios = function(mtg_id, audios){
         res.render("public/audios", {mtg_id: mtg_id, audios: audios});

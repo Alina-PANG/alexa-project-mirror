@@ -6,85 +6,47 @@
  <html lang="">
  <head>
  	<meta charset="utf-8">
-	<title>Meeting</title>
-	<% include ./partials/head %>
-	 <!-- CSS -->
+ 	<title>Meeting</title>
+ 	<% include ./partials/head %>
+ 	<!-- CSS -->
  	<link rel="stylesheet" type="text/css" href="/css/general.css">
  	<link rel="stylesheet" type="text/css" href="/css/all_mtg.css">
-
  </head>
  <body>    
-<% include ./partials/navbar %>
+ 	<% include ./partials/navbar %>
  	<section style="width: 100%;">
  		<div class="container main">
- 			<table style="width: 100%;">
- 				<tr>
- 					<th>Meeting Code</th>
- 					<th>Meeting Name</th>
- 					<th>Date</th>
- 					<th>Time</th>
- 					<th></th>
- 				</tr>
- 				
+ 			<div class="accordion" id="accordion">
  				<% for(var i = 0; i < meetings.rows.length; i++) { %>
-	 				<tr>
-	 					<td style="display:none;"><%= meetings.rows[i].id %></td>
-	 					<td><%= meetings.rows[i].mtg_code %></td>
-	 					<td><%= meetings.rows[i].name %></td>
-	 					<td><%= meetings.rows[i].mtg_timing.split('|')[0] %></td>
-	 					<td><%= meetings.rows[i].mtg_timing.split('|')[1] %></td>
-	 					<% var btn_id = "acc_btn_"+ meetings.rows[i].id; %>
-	 					<td>
-	 						<form action="/show_audios" method="post">
-	 							<input style="display:none;" id="mtg_id" type="text" name="mtg_id" value=<%= meetings.rows[i].id %>>
-	 							<button type="submit" class="accordion"
-	 							id=<%= btn_id %>>Audios</button>
-	 						</form>
-	 					</td>
-	 				</tr>
- 					<% var tr_id = "acc_tr_"+ meetings.rows[i].id %>
-<!-- 	 				<tr class="panel" id=<%= tr_id %>>
-	 					<td colspan="5">Loading Audio Data...</td>
-	 				</tr> -->
- 				<% } %> 
- 			</table>
- 		</div>
- 	</section>
+ 				<% var data_target = "#"+ meetings.rows[i].id; %>
+ 				<% var aria_controls = meetings.rows[i].id; %>
+ 				<% var card_id = "heading"+String(i) %>
+ 				<div class="card">
+ 					<div class="card-header" id=<%= card_id %>>
+ 						<div class="meeting_info">
+ 							<div class="meeting_info_item"><%= meetings.rows[i].mtg_code %></div>
+ 							<div class="meeting_info_item"><%= meetings.rows[i].name %></div>
+ 							<div class="meeting_info_item"><%= meetings.rows[i].mtg_timing.split('|')[0] %></div>
+ 							<div class="meeting_info_item"><%= meetings.rows[i].mtg_timing.split('|')[1] %></div>
+ 							</div class="meeting_info_item">
+ 								<button class="btn collapsed meeting_info_btn" type="button" data-toggle="collapse" data-target=<%= data_target %> aria-expanded="true" aria-controls=<%= aria_controls %>>
+ 									Audios and Text
+ 								</button>
+ 							</div>
 
+ 							<div id=<%= aria_controls %> class="collapse" aria-labelledby=<%= card_id %> data-parent="#accordion">
+ 								<div class="card-body">
+ 									Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+ 								</div>
+ 							</div>
+ 						</div>
 
- </body>
- <footer>
- 	<script>
- 		var acc = document.getElementsByClassName("accordion");
- 		var i;
- 		for (i = 0; i < acc.length; i++) {
- 			acc[i].addEventListener("click", function() {
- 				this.classList.toggle("active");
- 				var panel = this.parentElement.parentElement.nextElementSibling;
- 				if (panel.style.display === "contents") {
- 					panel.style.display = "none";
- 				} else {
- 					fetch('/show_audios', {method: 'POST'})
- 					.then(function(response) {
- 						if(response.ok) {
- 							console.log('show audio request received.');
- 						}
- 						throw new Error('Request failed.');
- 					})
- 					.then(function(data) {
-		 				var inner = '';
-		 				for(var i = 0; i < audios.rows.length; i++) {
-		 					inner += '<td colspan="1">Clip ' + str(i+1) + '</td><td colspan="4">'+ audios.rows[i].audio_url+'</td>'
-		 				}
-		 				document.getElementById('acc_tr_'+data.mtg_id).innerHTML = inner;
-		 			})
- 					.catch(function(error) {
- 						console.log(error);
- 					});
- 				};
- 				panel.style.display = "contents";
- 			})
- 		};
- 	</script>
- </footer>
- </html>
+ 					<% } %>
+ 					</div>
+ 				</div>
+ 			</section>
+ 		</body>
+ 		<footer>
+
+ 		</footer>
+ 		</html>
