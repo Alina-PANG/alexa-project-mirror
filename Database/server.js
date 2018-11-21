@@ -9,6 +9,9 @@
  const app = express();
  const db_func = require('./database/db_connection.js')
  const WebSocket = require('ws');
+ const fs = require('fs');
+ const sox = require('sox');
+ const child_process = require('child_process');
 
  app.use(express.json());
  app.use(bodyParser.urlencoded({ extended: true }));
@@ -20,7 +23,8 @@ app.use(fileUpload());
 app.use(express.static('audioclips'));
 
 let clientSockets = [];
- 
+
+// use a heartbeat check to close unused sockets
 setInterval(() => {
     //Heartbeat Check code....
 }, 5000); // Check Every 5 Seconds 
@@ -49,6 +53,7 @@ app.post("/request", (req, res) => {
     res.send("OKAY");
 });
 
+//file upload and transcription happens here
 app.post('/upload', function(req, res) {
     console.log(req);
     if(Object.keys(req.files).length == 0) {
@@ -67,10 +72,41 @@ app.post('/upload', function(req, res) {
         res.send('File uploaded!');
     });
 
+    // Transcription
+
+    // resample the audio to 16000 bit, single channel wav for the transcription server
+    // sox must be installed on the machine as well as the nodejs package sox
+    let tempFileName = filename + '.temp';
+    var job = sox.transcode('./audioclips/' + filename, './audioclips/' + tempFileName, {
+        sampleRate: 16000,
+        format: 'wav',
+        channelCount: 1,
+        bitrate: 16 *1024,
+    });
+
+    job.on('error', function(err) {
+        console.error(err);
+
+    job.start();
+
+    // Speech to text processing
+    // Pocketsphinx and Sphinxbase must be install on the ubuntu machine
+    let textFileName = filename.split(".")[0] + '.txt';
+    child_process.exec('pocketsphinx_continuous -infile ' + tempFileName + ' -logfn /dev/null > '
+                        + textFileName, function(error) {
+                            if(error) {
+                                console.log(error.stack);
+                                console.log('error code ' + error.code);
+                            }
+                        });
+
     // file is uploaded, push link to DB
     // TODO: need domain to get URL
     let URL = `http://localhost:8080/audioclips/${fileName}`;
-    db_func.createAudio(meetingID, URL);
+    let txtURL = `http://localhost:8080/audioclips/${textFileName}`;
+    db_func.createAudio(meetingID, URL, txtURL);
+
+
 });
 
 

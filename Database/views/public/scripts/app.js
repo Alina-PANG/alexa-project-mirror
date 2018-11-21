@@ -125,7 +125,9 @@ if (navigator.mediaDevices.getUserMedia) {
           console.log(state);
         }
         if(state == "HoldUp") {
-          holdUp();
+          // holdUp();
+          // changed to clip one hour so we can send to sox processor
+          clipSec(3600); 
           console.log(state);
         }
           
