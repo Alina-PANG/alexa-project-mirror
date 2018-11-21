@@ -92,13 +92,16 @@ app.post('/upload', function(req, res) {
     // Speech to text processing
     // Pocketsphinx and Sphinxbase must be install on the ubuntu machine
     let textFileName = filename.split(".")[0] + '.txt';
-    child_process.exec('pocketsphinx_continuous -infile ' + tempFileName + ' -logfn /dev/null > '
+    child_process.exec('pocketsphinx_continuous -infile ./audioclips/' + tempFileName + ' -logfn /dev/null > '
                         + textFileName, function(error) {
                             if(error) {
                                 console.log(error.stack);
                                 console.log('error code ' + error.code);
                             }
                         });
+
+    // Delete temp file
+    fs.unlinkSync('./audioclips/' + tempFileName);
 
     // file is uploaded, push link to DB
     // TODO: need domain to get URL
