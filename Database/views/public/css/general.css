@@ -28,7 +28,7 @@ div.card{
     padding-left: 20px;
     padding-right: 20px;
 }
-div.card:nth-child(2n){
+div.meeting_info_items:nth-child(2n){
 	background-color: #fafafa;
 }
 .meeting_info_btn{

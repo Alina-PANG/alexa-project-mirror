@@ -222,12 +222,12 @@ app.post("/cancel_mtg/:mtg_id", (req, res) => {
     db_func.cancelMtg(req.params.mtg_id, render_mtgs);
 });
 
-app.post('/show_audios', (req, res) => {
-    let render_audios = function(mtg_id, audios){
-        res.render("public/audios", {mtg_id: mtg_id, audios: audios});
-    }
-    db_func.showAllAudio(req.body.mtg_id, render_audios);
-});
+// app.post('/show_audios', (req, res) => {
+//     let render_audios = function(mtg_id, audios){
+//         res.render("public/audios", {mtg_id: mtg_id, audios: audios});
+//     }
+//     db_func.showAllAudio(req.body.mtg_id, render_audios);
+// });
 
  app.listen("8080", () => {
     console.log(__dirname+": Listening on localhost 8080...")
