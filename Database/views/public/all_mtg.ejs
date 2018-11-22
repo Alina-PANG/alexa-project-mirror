@@ -11,42 +11,63 @@
  	<!-- CSS -->
  	<link rel="stylesheet" type="text/css" href="/css/general.css">
  	<link rel="stylesheet" type="text/css" href="/css/all_mtg.css">
+ 	<script type="text/javascript">
+ 		$(document).ready(() => {
+ 			$('button').click(function(){
+ 				var $this = $(this);
+ 				var mtg_id = $this.attr('aria-controls')
+ 				if($('#'+mtg_id).html().length > 5){
+ 					if($('#'+mtg_id).css('display') == 'none'){
+ 						$('#'+mtg_id).show();
+ 					} else{
+ 						$('#'+mtg_id).hide();
+ 					}
+ 				}else{
+ 					$.ajax({
+ 						url: mtg_id + '/files/',
+ 						type: 'GET',
+ 						dataType: 'json',
+ 						success: (data) => {
+ 							var rows = data.rows;
+ 							console.log($('#'+mtg_id))
+ 							var content = "<br>"
+ 							for (let i=0;i<rows.length;i++){
+ 								content += "<p><div class='audio_urls'>Audio: "+rows[i]["audio_url"]+"</div><div class='text_urls'>Text: "+rows[i]["text_url"]+"</div></p>";
+ 							}
+ 							$('#'+mtg_id).html(content);
+ 						}
+ 					});
+ 				}
+ 			});
+ 		});
+ 	</script>
  </head>
  <body>    
  	<% include ./partials/navbar %>
  	<section style="width: 100%;">
- 		<div class="container main">
- 			<div class="accordion" id="accordion">
- 				<% for(var i = 0; i < meetings.rows.length; i++) { %>
- 				<% var data_target = "#"+ meetings.rows[i].id; %>
- 				<% var aria_controls = meetings.rows[i].id; %>
- 				<% var card_id = "heading"+String(i) %>
- 				<div class="card">
- 					<div class="card-header" id=<%= card_id %>>
- 						<div class="meeting_info">
- 							<div class="meeting_info_item"><%= meetings.rows[i].mtg_code %></div>
- 							<div class="meeting_info_item"><%= meetings.rows[i].name %></div>
- 							<div class="meeting_info_item"><%= meetings.rows[i].mtg_timing.split('|')[0] %></div>
- 							<div class="meeting_info_item"><%= meetings.rows[i].mtg_timing.split('|')[1] %></div>
- 							</div class="meeting_info_item">
- 								<button class="btn collapsed meeting_info_btn" type="button" data-toggle="collapse" data-target=<%= data_target %> aria-expanded="true" aria-controls=<%= aria_controls %>>
- 									Audios and Text
- 								</button>
- 							</div>
-
- 							<div id=<%= aria_controls %> class="collapse" aria-labelledby=<%= card_id %> data-parent="#accordion">
- 								<div class="card-body">
- 									Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
- 								</div>
- 							</div>
- 						</div>
-
- 					<% } %>
- 					</div>
+ 		<div class="container main meeting_info" id="jQuery_accordion">
+ 			<% for(var i = 0; i < meetings.rows.length; i++) { %>
+ 			<% var aria_controls = meetings.rows[i].id; %>
+ 			<div class="meeting_info_items">
+ 				<div class="meeting_info_item"><%= meetings.rows[i].mtg_code %></div>
+ 				<div class="meeting_info_item"><%= meetings.rows[i].name %></div>
+ 				<div class="meeting_info_item"><%= meetings.rows[i].mtg_timing.split('|')[0] %></div>
+ 				<div class="meeting_info_item"><%= meetings.rows[i].mtg_timing.split('|')[1] %></div>
+ 				<div class="meeting_info_item">
+ 					<button class="btn meeting_info_btn" type="button" aria-controls=<%= aria_controls %>>
+ 						Audios and Text
+ 					</button>
  				</div>
- 			</section>
- 		</body>
- 		<footer>
-
- 		</footer>
- 		</html>
+ 			</div>
+ 			<br>
+ 			<br>
+ 			<div id=<%= aria_controls %>>
+ 			</div>
+ 			<% } %>
+ 		</div>
+ 	</section>
+ </body>
+ <footer> 	
+ 	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+ </footer>
+ </html>

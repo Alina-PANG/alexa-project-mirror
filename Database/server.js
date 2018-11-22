@@ -10,8 +10,9 @@
  const db_func = require('./database/db_connection.js')
  const WebSocket = require('ws');
  const fs = require('fs');
- const sox = require('sox');
- const child_process = require('child_process');
+ // comment
+ // const sox = require('sox');
+ // const child_process = require('child_process');
 
  app.use(express.json());
  app.use(bodyParser.urlencoded({ extended: true }));
@@ -76,37 +77,40 @@ app.post('/upload', function(req, res) {
 
     // resample the audio to 16000 bit, single channel wav for the transcription server
     // sox must be installed on the machine as well as the nodejs package sox
-    let tempFileName = filename + '.temp';
-    var job = sox.transcode('./audioclips/' + filename, './audioclips/' + tempFileName, {
-        sampleRate: 16000,
-        format: 'wav',
-        channelCount: 1,
-        bitrate: 16 *1024,
-    });
+    //comment
+    // let tempFileName = filename + '.temp';
+    // var job = sox.transcode('./audioclips/' + filename, './audioclips/' + tempFileName, {
+    //     sampleRate: 16000,
+    //     format: 'wav',
+    //     channelCount: 1,
+    //     bitrate: 16 *1024,
+    // });
 
-    job.on('error', function(err) {
-        console.error(err);
+    // job.on('error', function(err) {
+    //     console.error(err);
 
-    job.start();
+    // job.start();
 
-    // Speech to text processing
-    // Pocketsphinx and Sphinxbase must be install on the ubuntu machine
-    let textFileName = filename.split(".")[0] + '.txt';
-    child_process.exec('pocketsphinx_continuous -infile ./audioclips/' + tempFileName + ' -logfn /dev/null > '
-                        + textFileName, function(error) {
-                            if(error) {
-                                console.log(error.stack);
-                                console.log('error code ' + error.code);
-                            }
-                        });
+    // // Speech to text processing
+    // // Pocketsphinx and Sphinxbase must be install on the ubuntu machine
+    // let textFileName = filename.split(".")[0] + '.txt';
+    // child_process.exec('pocketsphinx_continuous -infile ./audioclips/' + tempFileName + ' -logfn /dev/null > '
+    //                     + textFileName, function(error) {
+    //                         if(error) {
+    //                             console.log(error.stack);
+    //                             console.log('error code ' + error.code);
+    //                         }
+    //                     });
 
-    // Delete temp file
-    fs.unlinkSync('./audioclips/' + tempFileName);
+    // // Delete temp file
+    // fs.unlinkSync('./audioclips/' + tempFileName);
 
     // file is uploaded, push link to DB
     // TODO: need domain to get URL
     let URL = `http://localhost:8080/audioclips/${fileName}`;
-    let txtURL = `http://localhost:8080/audioclips/${textFileName}`;
+
+    //comment
+    // let txtURL = `http://localhost:8080/audioclips/${textFileName}`;
     db_func.createAudio(meetingID, URL, txtURL);
 
 
@@ -197,6 +201,12 @@ function guidGenerator() {
 //     console.log(__dirname+': Saving audio name to DB with mtg_id '+ req.params.mtg_id+' ...')
 //     db_func.createAudio(req.params.mtg_id, req.body.audio_url, create_audio);
 // });
+app.get("/:mtg_id/files", (req, res) => {
+    let render_audios = function(audios){
+        res.send(audios);
+    }
+    db_func.showAllAudio(req.params.mtg_id, render_audios);
+})
 
  app.get("/show_all_mtg", (req, res) => {
     let render_mtgs = function(mtgs){
