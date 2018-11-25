@@ -20,7 +20,7 @@
         <% var aria_controls = meetings.rows[i].id; %>
         <div class="meeting_info_outer">
         <div class="meeting_info_items">
-          <div class="meeting_info_item"><strong>Meeting<%= i+1 %></strong></div>
+          <div class="meeting_info_item"><strong>Meeting <%= i+1 %></strong></div>
           <div class="meeting_info_item"><%= meetings.rows[i].mtg_code %></div>
           <div class="meeting_info_item"><%= meetings.rows[i].name %></div>
           <div class="meeting_info_item"><%= meetings.rows[i].mtg_timing.split('|')[0] %></div>

@@ -53,7 +53,7 @@ button {
 	color: white;
     background-color: #9530a7;
     padding: 11px;
-    border-radius: 19px;
+    border-radius: 5px;
    font-family : inherit;
 }
 button:hover{

@@ -29,6 +29,7 @@ $(document).ready(() => {
 					}else{
 					for (let i=0;i<rows.length;i++){
 						content += `
+							<div class="url_item_outer">
 							<div class="url_item">
 							<div class='audio_urls'>
 								<span class="url_label">Clip `+(i+1).toString()+`</span>
@@ -38,7 +39,12 @@ $(document).ready(() => {
 								<span class="url_label">Notes `+(i+1).toString()+`</span>
 								<a class="url_content" href="`+rows[i]["text_url"]+`">`+rows[i]["text_url"]+`</a>
 								</div>
-							</div>`;
+							</div>
+							<div class="url_delete">
+								
+								<button><span class="glyphicon glyphicon-trash"></span></button>
+							</div>
+						</div>`;
 					}}
 
 					$('#'+mtg_id).html(content);

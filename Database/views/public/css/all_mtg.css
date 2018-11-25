@@ -23,11 +23,15 @@ align-items: center;
       padding-top:10px;
 }
 .url_label{
-  flex:3;
+  flex:1;
 }
-.urls_content > .url_item{
+.url_item_outer{
   padding-left: 35px;
-padding-right: 35px;
+  display:flex;
+  padding-right: 35px;
+}
+.url_item{
+  flex:5;
 }
 .alert-warning{
   margin:0px !important;
@@ -35,4 +39,15 @@ padding-right: 35px;
 .alert-outer{
   padding-top: 7px;
 padding-bottom: 7px;
+}
+.url_content{
+  flex:5;
+}
+.url_delete > button {
+  background-color: Transparent;
+  color: #8a53a6;
+  border:0;
+  position: relative;
+right: 10px;
+}
 }
