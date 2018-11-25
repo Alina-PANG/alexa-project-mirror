@@ -107,11 +107,11 @@ $(document).ready(() => {
 							<div class="url_item">
 								<div class='audio_urls'>
 									<span class="url_label">Clip `+(i+1).toString()+`</span>
-									<a class="url_content" href="`+rows[i]["audio_url"]+`">`+rows[i]["audio_url"]+`</a>
+									<div class="url_content_outer"><a class="url_content" href="`+rows[i]["audio_url"]+`">`+rows[i]["audio_url"]+`</a></div>
 								</div>
 								<div class='text_urls'>
 									<span class="url_label">Notes `+(i+1).toString()+`</span>
-									<a class="url_content" href="`+rows[i]["text_url"]+`">`+rows[i]["text_url"]+`</a>
+									<div class="url_content_outer"><a class="url_content" href="`+rows[i]["text_url"]+`">`+rows[i]["text_url"]+`</a></div>
 								</div>
 							</div>
 							<div class="url_delete">

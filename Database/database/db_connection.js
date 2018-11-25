@@ -28,7 +28,7 @@ exports.deleteAudio = function(audio_id, callback){
 
 exports.showAllMtg = function(callback) {
   const query_show_all_mtg = {
-    text: "SELECT id, mtg_code, name, TO_CHAR(mtg_time AT TIME ZONE 'PDT', 'Mon DD, YYYY|HH24:MI') mtg_timing FROM meeting ORDER BY mtg_time DESC;"
+    text: "SELECT id, mtg_code, name, TO_CHAR(mtg_time AT TIME ZONE 'PST', 'Mon DD, YYYY|HH24:MI') mtg_timing FROM meeting ORDER BY mtg_time DESC;"
     }
 
     pool.query(query_show_all_mtg, (err, res) => {

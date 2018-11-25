@@ -20,6 +20,15 @@
 </div> -->
     <div id="loader"></div>
     <div class="container main meeting_info" id="jQuery_accordion">
+      <div class="search-menu">
+
+        <input type="text" id="search-bar" onkeyup="search_mtg()" placeholder="Search for meetings.." title="Type in a meeting name">
+        <select class="form-control" id="select-tag">
+            <option value="name">Name</option>
+            <option value="code">Code</option>
+        </select>
+
+      </div>
       <% for(var i = 0; i < meetings.rows.length; i++) { %>
         <% var aria_controls = meetings.rows[i].id; %>
         <div class="meeting_info_outer">
@@ -29,11 +38,9 @@
           <div class="meeting_info_item"><%= meetings.rows[i].name %></div>
           <div class="meeting_info_item"><%= meetings.rows[i].mtg_timing.split('|')[0] %></div>
           <div class="meeting_info_item"><%= meetings.rows[i].mtg_timing.split('|')[1] %></div>
-
-            <button class="btn meeting_info_btn" type="button" aria-controls=<%= aria_controls %>>
-              <span class="glyphicon glyphicon-plus" style="color:white;"></span>
-            </button>
-
+          <button class="btn meeting_info_btn" type="button" aria-controls=<%= aria_controls %>>
+            <span class="glyphicon glyphicon-plus" style="color:white;"></span>
+          </button>
         </div>
         <div id=<%= aria_controls %> class="urls_content" style="display:none;">
         </div>
@@ -43,6 +50,28 @@
     </section>
   </body>
   <footer>
+    <script>
+function search_mtg() {
+  var select_tag = $('#select-tag').find(":selected").text()
+    var input, filter, accordion, meeting_info_items, meeting_info_item, i;
+    input = document.getElementById("search-bar");
+    filter = input.value.toUpperCase();
+    accordion = document.getElementById("jQuery_accordion");
+    meeting_info_items = accordion.getElementsByClassName("meeting_info_items");
+    for (i = 0; i < meeting_info_items.length; i++) {
+      if(select_tag.toUpperCase() == "NAME"){
+        meeting_info_item = meeting_info_items[i].getElementsByClassName("meeting_info_item")[2];
+      }else if (select_tag.toUpperCase() == "CODE") {
+        meeting_info_item = meeting_info_items[i].getElementsByClassName("meeting_info_item")[1];
+      }
+        if (meeting_info_item.innerHTML.toUpperCase().indexOf(filter) > -1) {
+            meeting_info_items[i].style.display = "";
+        } else {
+            meeting_info_items[i].style.display = "none";
+        }
+    }
+}
+</script>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="scripts/toggle.js"></script>
   </footer>
