@@ -1,3 +1,6 @@
+/**
+* @author Hangzhi Pang
+*/
 @import url('https://fonts.googleapis.com/css?family=Rubik');
 body{
 	margin: 0px;
@@ -7,6 +10,9 @@ body{
 	padding-left: 5%;
 	padding-right: 5%;
 }
+div{
+	box-sizing: border-box;
+}
 
 /*Must clean up later*/
 /*KnoCap logo*/
@@ -14,27 +20,9 @@ body{
 {
     margin-left: 47%;
     height: 5rem;
-    
+
 }
-div.card:hover{
-	cursor: auto !important;
-}
-div.meeting_info_item{
-	float:left;
-	width: 18%;
-}
-div.card{
-	    padding-top: 20px;
-    padding-left: 20px;
-    padding-right: 20px;
-}
-div.meeting_info_items:nth-child(2n){
-	background-color: #fafafa;
-}
-.meeting_info_btn{
-	position: relative;
-    bottom: 14px;
-}
+
 /*Menu icon*/
 .navbar i
 {
@@ -69,7 +57,7 @@ button {
    font-family : inherit;
 }
 button:hover{
-	opacity: 0.5;	
+	opacity: 0.5;
 	cursor: pointer;
 }
 input{

@@ -1,3 +1,7 @@
+/**
+* @author Hangzhi Pang
+*/
+
   const { Pool, Client } = require('pg');
    const pool = new Pool({
       user: 'alexa_admin',
@@ -87,13 +91,13 @@ exports.createMtg = function (mtg_name, mtg_code, callback){
      var now = moment().format();
 
      const uuidv1 = require('uuid/v1');
-     var mtg_id = uuidv1(); 
+     var mtg_id = uuidv1();
 
      const query_insert_mtg = {
       text: 'INSERT INTO meeting(id, mtg_time, name, user_id, mtg_code) VALUES($1, $2, $3, $4, $5)',
       values: [mtg_id, now, mtg_name, 1, mtg_code],
     };
-    
+
     pool.query(query_insert_mtg, (err, res) => {
       if (err) {
         console.log(__dirname+": error in pool"+err.stack)
@@ -120,7 +124,3 @@ exports.editMtgCode = function(mtg_id, mtg_code) {
     });
 
 }
-
-
-
-

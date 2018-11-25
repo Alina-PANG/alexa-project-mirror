@@ -1,23 +1,38 @@
-.accordion {
-    /*background-color: #eee;*/
-    /*color: #444;*/
-    cursor: pointer;
-    padding: 18px;
-    width: 100%;
-    border: none;
-    text-align: left;
-    outline: none;
-    font-size: 15px;
-    transition: 0.4s;
+/**
+* @author Hangzhi Pang
+*/
+.meeting_info_items{
+  display:flex;
+  padding: 35px;
+height: 47px;
+align-items: center;
 }
-
-.active {
-    background-color: #ccc; 
+.meeting_info_outer:nth-child(2n+1) > .meeting_info_items{
+	background-color: #fafafa;
 }
-
-.panel {
-    padding: 0 18px;
-    display: none;
-    background-color: white;
-    overflow: hidden;
+.meeting_info_item{
+  flex:5;
+}
+.meeting_info_btn{
+  flex:1;
+  margin:0;
+}
+.audio_urls, .text_urls{
+  display:flex;
+      padding-bottom: 10px;
+      padding-top:10px;
+}
+.url_label{
+  flex:3;
+}
+.urls_content > .url_item{
+  padding-left: 35px;
+padding-right: 35px;
+}
+.alert-warning{
+  margin:0px !important;
+}
+.alert-outer{
+  padding-top: 7px;
+padding-bottom: 7px;
 }

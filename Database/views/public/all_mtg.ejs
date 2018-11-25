@@ -1,44 +1,45 @@
 <!-- /**
- * @author Hangzhi Pang
- */ -->
+* @author Hangzhi Pang
+*/ -->
 
- <!DOCTYPE html>
- <html lang="">
- <head>
- 	<meta charset="utf-8">
- 	<title>Meeting</title>
- 	<% include ./partials/head %>
- 	<!-- CSS -->
- 	<link rel="stylesheet" type="text/css" href="/css/general.css">
- 	<link rel="stylesheet" type="text/css" href="/css/all_mtg.css">
- </head>
- <body>    
- 	<% include ./partials/navbar %>
- 	<section style="width: 100%;">
- 		<div class="container main meeting_info" id="jQuery_accordion">
- 			<% for(var i = 0; i < meetings.rows.length; i++) { %>
- 			<% var aria_controls = meetings.rows[i].id; %>
- 			<div class="meeting_info_items">
- 				<div class="meeting_info_item"><%= meetings.rows[i].mtg_code %></div>
- 				<div class="meeting_info_item"><%= meetings.rows[i].name %></div>
- 				<div class="meeting_info_item"><%= meetings.rows[i].mtg_timing.split('|')[0] %></div>
- 				<div class="meeting_info_item"><%= meetings.rows[i].mtg_timing.split('|')[1] %></div>
- 				<div class="meeting_info_item">
- 					<button class="btn meeting_info_btn" type="button" aria-controls=<%= aria_controls %>>
- 						Audios and Text
- 					</button>
- 				</div>
- 			</div>
- 			<br>
- 			<br>
- 			<div id=<%= aria_controls %>>
- 			</div>
- 			<% } %>
- 		</div>
- 	</section>
- </body>
- <footer> 	
- 	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
- 	<script src="scripts/toggle.js"></script>
- </footer>
- </html>
+<!DOCTYPE html>
+<html lang="">
+<head>
+  <meta charset="utf-8">
+  <title>Meeting</title>
+  <% include ./partials/head %>
+  <!-- CSS -->
+  <link rel="stylesheet" type="text/css" href="/css/general.css">
+  <link rel="stylesheet" type="text/css" href="/css/all_mtg.css">
+</head>
+<body>
+  <% include ./partials/navbar %>
+  <section style="width: 100%;">
+    <div class="container main meeting_info" id="jQuery_accordion">
+      <% for(var i = 0; i < meetings.rows.length; i++) { %>
+        <% var aria_controls = meetings.rows[i].id; %>
+        <div class="meeting_info_outer">
+        <div class="meeting_info_items">
+          <div class="meeting_info_item"><strong>Meeting<%= i+1 %></strong></div>
+          <div class="meeting_info_item"><%= meetings.rows[i].mtg_code %></div>
+          <div class="meeting_info_item"><%= meetings.rows[i].name %></div>
+          <div class="meeting_info_item"><%= meetings.rows[i].mtg_timing.split('|')[0] %></div>
+          <div class="meeting_info_item"><%= meetings.rows[i].mtg_timing.split('|')[1] %></div>
+
+            <button class="btn meeting_info_btn" type="button" aria-controls=<%= aria_controls %>>
+              <span class="glyphicon glyphicon-plus" style="color:white;"></span>
+            </button>
+
+        </div>
+        <div id=<%= aria_controls %> class="urls_content" style="display:none;">
+        </div>
+      </div>
+        <% } %>
+      </div>
+    </section>
+  </body>
+  <footer>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="scripts/toggle.js"></script>
+  </footer>
+  </html>
