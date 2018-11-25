@@ -11,21 +11,20 @@
       port: 5432,
     });
 
-// exports.showAllMtg = function(callback){
-//   const query_show_all_mtg = {
-//     text: "SELECT id, mtg_code, name, TO_CHAR(mtg_time AT TIME ZONE 'PDT', 'Mon DD, YYYY|HH24:MI') mtg_timing FROM meeting ORDER BY mtg_time DESC;"
-//     }
 
-//     pool.query(query_show_all_mtg, (err, res) => {
-//       if (err) {
-//         console.log(__dirname+": error in pool"+err.stack)
-//       } else {
-//         console.log(__dirname+": successed in retrieving all meetings from the Database.")
-//         // console.log(res);
-//         callback(res);
-//       }
-//     });
-// }
+exports.deleteAudio = function(audio_id, callback){
+  const query_cancel_mtg = {
+    text: "DELETE FROM recorded_audio WHERE id= '"+audio_id+"';"
+  };
+    pool.query(query_cancel_mtg, (err, res) => {
+      if (err) {
+        console.log(__dirname+": error in pool: "+err.stack)
+      } else {
+        console.log(__dirname+": successed in deleting audio with ID "+audio_id+".")
+        callback(res);
+      }
+    });
+}
 
 exports.showAllMtg = function(callback) {
   const query_show_all_mtg = {

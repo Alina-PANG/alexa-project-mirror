@@ -28,7 +28,7 @@ let clientSockets = [];
 // use a heartbeat check to close unused sockets
 setInterval(() => {
     //Heartbeat Check code....
-}, 5000); // Check Every 5 Seconds 
+}, 5000); // Check Every 5 Seconds
 
 const wss = new WebSocket.Server({
   port: 7070
@@ -45,7 +45,7 @@ app.post("/request", (req, res) => {
         if(socket.ID == req.body.ID){
             socket.WebSocket.send(JSON.stringify(
                 {
-                    type: "EchoRequest", 
+                    type: "EchoRequest",
                     state: req.body.state // Stop, Start, Pause, etc......
                 }
             )); // Change this to suit needs
@@ -143,14 +143,14 @@ wss.on('connection', function connection(ws) {
            let data = JSON.parse(message);
            if(data.type == 'UpdateDB'){
                db_func.editMtgCode(data.meetingID, data.code);
-           } 
+           }
        }
      });
      console.log("connected client")
 
      ws.send(JSON.stringify(
          {
-             type: "Initial", 
+             type: "Initial",
              state: null,
              data: id
          }
@@ -208,6 +208,13 @@ app.get("/:mtg_id/files", (req, res) => {
     db_func.showAllAudio(req.params.mtg_id, render_audios);
 })
 
+app.post('/:mtg_id/files/delete/:audio_id', (req, res) => {
+  let delete_audio_res = function(){
+    res.redirect('/'+req.params.mtg_id+'/files');
+  }
+  db_func.deleteAudio(req.params.audio_id, delete_audio_res);
+})
+
  app.get("/show_all_mtg", (req, res) => {
     let render_mtgs = function(mtgs){
         res.render("public/all_mtg", {meetings: mtgs});
@@ -216,11 +223,13 @@ app.get("/:mtg_id/files", (req, res) => {
 });
 
 app.post("/cancel_mtg/:mtg_id", (req, res) => {
-    let render_mtgs = function(){
+    let delete_mtg = function(){
         res.render("public/index");
     }
-    db_func.cancelMtg(req.params.mtg_id, render_mtgs);
+    db_func.cancelMtg(req.params.mtg_id, delete_mtg);
 });
+
+
 
 // app.post('/show_audios', (req, res) => {
 //     let render_audios = function(mtg_id, audios){
@@ -232,5 +241,3 @@ app.post("/cancel_mtg/:mtg_id", (req, res) => {
  app.listen("8080", () => {
     console.log(__dirname+": Listening on localhost 8080...")
 });
-
-

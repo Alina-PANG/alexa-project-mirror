@@ -2,7 +2,41 @@
 * @author Hangzhi Pang
 */
 $(document).ready(() => {
-	$('button').click(function(){
+	$('.urls_content').on('click', '.delete_audio_btn', function (){
+		var $this = $(this);
+		var mtg_id = $this.attr('mtg-id');
+		$.ajax({
+			url: $this.attr('mtg-id') + '/files/delete/' + $this.attr('audio-id'),
+			type: 'POST',
+			dataType: 'json',
+			success: (data) => {
+				//copy
+				var rows = data.rows;
+				var content="";
+				for (let i=0;i<rows.length;i++){
+					content += `
+						<div class="url_item_outer">
+						<div class="url_item">
+						<div class='audio_urls'>
+							<span class="url_label">Clip `+(i+1).toString()+`</span>
+							<a class="url_content" href="`+rows[i]["audio_url"]+`">`+rows[i]["audio_url"]+`</a>
+						</div>
+						<div class='text_urls'>
+							<span class="url_label">Notes `+(i+1).toString()+`</span>
+							<a class="url_content" href="`+rows[i]["text_url"]+`">`+rows[i]["text_url"]+`</a>
+							</div>
+						</div>
+						<div class="url_delete">
+								<button class="delete_audio_btn" audio-id="`+rows[i]["id"]+`" mtg-id="`+mtg_id+`"><span class="glyphicon glyphicon-trash"></span></button>
+						</div>
+					</div>`;
+				}//copy
+				$('#'+mtg_id).html(content);
+			}
+		});
+	});
+
+	$('.meeting_info_btn').click(function(){
 		var $this = $(this);
 		var mtg_id = $this.attr('aria-controls');
 
@@ -41,8 +75,7 @@ $(document).ready(() => {
 								</div>
 							</div>
 							<div class="url_delete">
-								
-								<button><span class="glyphicon glyphicon-trash"></span></button>
+									<button class="delete_audio_btn" audio-id="`+rows[i]["id"]+`" mtg-id="`+mtg_id+`"><span class="glyphicon glyphicon-trash"></span></button>
 							</div>
 						</div>`;
 					}}
