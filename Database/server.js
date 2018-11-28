@@ -6,13 +6,18 @@
  const { sanitizeBody } = require('express-validator/filter');
  const bodyParser = require('body-parser');
  const express = require('express');
- const app = express();
+
  const db_func = require('./database/db_connection.js')
  const WebSocket = require('ws');
  const fs = require('fs');
- // comment
- // const sox = require('sox');
- // const child_process = require('child_process');
+ const https = require('https');
+ // must install sox for audio processing and transcription
+ const sox = require('sox');
+ const child_process = require('child_process');
+
+
+
+ const app = express();
 
  app.use(express.json());
  app.use(bodyParser.urlencoded({ extended: true }));
@@ -21,7 +26,7 @@
  app.use(express.static(__dirname + '/views/public'));
  // file upload
 app.use(fileUpload());
-app.use(express.static('audioclips'));
+app.use('/audioclips',express.static('audioclips'));
 
 let clientSockets = [];
 
@@ -30,9 +35,11 @@ setInterval(() => {
     //Heartbeat Check code....
 }, 5000); // Check Every 5 Seconds
 
+/* tagged for delete
 const wss = new WebSocket.Server({
   port: 7070
 });
+*/
 
 // app.get("/", (req, res) => {
 //     res.sendFile(`${__dirname}/public/index.html`);
@@ -78,39 +85,43 @@ app.post('/upload', function(req, res) {
     // resample the audio to 16000 bit, single channel wav for the transcription server
     // sox must be installed on the machine as well as the nodejs package sox
     //comment
-    // let tempFileName = filename + '.temp';
-    // var job = sox.transcode('./audioclips/' + filename, './audioclips/' + tempFileName, {
-    //     sampleRate: 16000,
-    //     format: 'wav',
-    //     channelCount: 1,
-    //     bitrate: 16 *1024,
-    // });
+    
+    let tempFileName = fileName + '.temp';
+    var job = sox.transcode('./audioclips/' + fileName, './audioclips/' + tempFileName, {
+         sampleRate: 16000,
+         format: 'wav',
+         channelCount: 1,
+         bitrate: 16 *1024,
+     });
 
-    // job.on('error', function(err) {
-    //     console.error(err);
+     job.on('error', function(err) {
+         console.error(err);
+     });
 
-    // job.start();
+    job.start();
 
-    // // Speech to text processing
-    // // Pocketsphinx and Sphinxbase must be install on the ubuntu machine
-    // let textFileName = filename.split(".")[0] + '.txt';
-    // child_process.exec('pocketsphinx_continuous -infile ./audioclips/' + tempFileName + ' -logfn /dev/null > '
-    //                     + textFileName, function(error) {
-    //                         if(error) {
-    //                             console.log(error.stack);
-    //                             console.log('error code ' + error.code);
-    //                         }
-    //                     });
+    /*
+    // Speech to text processing
+    // Pocketsphinx and Sphinxbase must be install on the ubuntu machine
+    let textFileName = fileName.split(".")[0] + '.txt';
+    child_process.exec('pocketsphinx_continuous -infile ./audioclips/' + tempFileName + ' -logfn /dev/null > '
+                         + textFileName, function(error) {
+                             if(error) {
+                                 console.log(error.stack);
+                                 console.log('error code ' + error.code);
+                             }
+                         });
 
-    // // Delete temp file
-    // fs.unlinkSync('./audioclips/' + tempFileName);
-
+    // Delete temp file
+    fs.unlinkSync('./audioclips/' + tempFileName);
+    */
     // file is uploaded, push link to DB
     // TODO: need domain to get URL
-    let URL = `http://localhost:8080/audioclips/${fileName}`;
+    let URL = `https://ec2-54-210-24-104.compute-1.amazonaws.com:8443/audioclips/${fileName}`;
 
     //comment
-    // let txtURL = `http://localhost:8080/audioclips/${textFileName}`;
+    //let txtURL = `http://ec2-54-210-24-104.compute-1.amazonaws.com/audioclips/${textFileName}`;
+    let txtURL = 'placeholder';
     db_func.createAudio(meetingID, URL, txtURL);
 
 
@@ -126,6 +137,21 @@ function isJSON(str) {
     }
     return true;
 }
+
+
+ // https variables
+ var privateKey = fs.readFileSync('./key.pem');
+ var certificate = fs.readFileSync('./cert.pem');
+ var credentials = {key: privateKey, cert: certificate};
+
+// httpsServer
+var httpsServer = https.createServer(credentials, app);
+httpsServer.listen(8443);
+
+const wss = new WebSocket.Server({
+  server: httpsServer
+  //port: 8443
+});
 
 // websocket server, on connection generate ID and send display on front end
 wss.on('connection', function connection(ws) {
@@ -161,7 +187,8 @@ wss.on('connection', function connection(ws) {
 
 function guidGenerator() {
     var S4 = function() {
-        return Math.floor(((1+Math.random())*0x10000)|0).toString(16).substring(1);
+
+        return (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
     };
     return (S4());
 }

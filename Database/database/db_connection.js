@@ -42,10 +42,10 @@ exports.showAllMtg = function(callback) {
     });
 }
 
-exports.createAudio = function(mtg_id, audio_url){
+exports.createAudio = function(mtg_id, audio_url, text_url){
   const query_insert_audio = {
-    text: 'INSERT INTO recorded_audio(mtg_id, audio_url) VALUES($1, $2)',
-    values: [mtg_id, audio_url]
+    text: 'INSERT INTO recorded_audio(mtg_id, audio_url, text_url) VALUES($1, $2, $3)',
+    values: [mtg_id, audio_url, text_url]
   };
     pool.query(query_insert_audio, (err, res) => {
       if (err) {
