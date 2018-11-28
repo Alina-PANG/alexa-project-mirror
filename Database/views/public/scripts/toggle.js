@@ -18,6 +18,30 @@ $(document).ready(() => {
 	// 			 }
 	// });
 
+  function getContent(data, mtg_id){
+	var rows = data.rows;
+	var content="";
+	for (let i=0;i<rows.length;i++){
+		content += `
+		<div class="url_item_outer">
+			<div class="url_item">
+				<div class='audio_urls'>
+					<span class="url_label">Clip `+(i+1).toString()+`</span>
+					<div class="url_content_outer"><a class="url_content" href="`+rows[i]["audio_url"]+`">`+rows[i]["audio_url"]+`</a></div>
+				</div>
+				<div class='text_urls'>
+					<span class="url_label">Notes `+(i+1).toString()+`</span>
+					<div class="url_content_outer"><a class="url_content" href="`+rows[i]["text_url"]+`">`+rows[i]["text_url"]+`</a></div>
+				</div>
+			</div>
+			<div class="url_delete">
+				<button class="delete_audio_btn" audio-id="`+rows[i]["id"]+`" mtg-id="`+mtg_id+`"><span class="glyphicon glyphicon-trash"></span></button>
+			</div>
+		</div>`;
+	}
+	return content;
+  }
+
   $("#loader").hide();
 	$('.urls_content').on('click', '.delete_audio_btn', function (){
 		var $this = $(this);
@@ -35,27 +59,7 @@ $(document).ready(() => {
 				type: 'POST',
 				dataType: 'json',
 				success: (data) => {
-					//copy
-					var rows = data.rows;
-					var content="";
-					for (let i=0;i<rows.length;i++){
-						content += `
-						<div class="url_item_outer">
-							<div class="url_item">
-								<div class='audio_urls'>
-									<span class="url_label">Clip `+(i+1).toString()+`</span>
-									<a class="url_content" href="`+rows[i]["audio_url"]+`">`+rows[i]["audio_url"]+`</a>
-								</div>
-								<div class='text_urls'>
-									<span class="url_label">Notes `+(i+1).toString()+`</span>
-									<a class="url_content" href="`+rows[i]["text_url"]+`">`+rows[i]["text_url"]+`</a>
-								</div>
-							</div>
-							<div class="url_delete">
-								<button class="delete_audio_btn" audio-id="`+rows[i]["id"]+`" mtg-id="`+mtg_id+`"><span class="glyphicon glyphicon-trash"></span></button>
-							</div>
-						</div>`;
-					}//copy
+					getContent(data, mtg_id);
 					$('#'+mtg_id).html(content);
 				}//success
 			})//ajax;

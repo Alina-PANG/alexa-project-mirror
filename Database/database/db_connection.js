@@ -93,8 +93,8 @@ exports.createMtg = function (mtg_name, mtg_code, callback){
      var mtg_id = uuidv1();
 
      const query_insert_mtg = {
-      text: 'INSERT INTO meeting(id, mtg_time, name, user_id, mtg_code) VALUES($1, $2, $3, $4, $5)',
-      values: [mtg_id, now, mtg_name, 1, mtg_code],
+      text: 'INSERT INTO meeting(id, mtg_time, name, mtg_code) VALUES($1, $2, $3, $4)',
+      values: [mtg_id, now, mtg_name, mtg_code],
     };
 
     pool.query(query_insert_mtg, (err, res) => {

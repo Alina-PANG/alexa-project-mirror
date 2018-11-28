@@ -170,8 +170,8 @@ if (navigator.mediaDevices.getUserMedia) {
             clipLabel.textContent = clipName;
           }
     
-          clipContainer.appendChild(audio);
           clipContainer.appendChild(clipLabel);
+          clipContainer.appendChild(audio);
           clipContainer.appendChild(deleteButton);
           soundClips.appendChild(clipContainer);
     
