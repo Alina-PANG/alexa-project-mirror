@@ -78,8 +78,8 @@ app.post('/upload', function(req, res) {
     // resample the audio to 16000 bit, single channel wav for the transcription server
     // sox must be installed on the machine as well as the nodejs package sox
     //comment
-    let tempFileName = filename + '.temp';
-    var job = sox.transcode('./audioclips/' + filename, './audioclips/' + tempFileName, {
+    let tempFileName = fileName + '.temp';
+    var job = sox.transcode('./audioclips/' + fileName, './audioclips/' + tempFileName, {
          sampleRate: 16000,
          format: 'wav',
          channelCount: 1,
@@ -94,7 +94,7 @@ app.post('/upload', function(req, res) {
 
     // Speech to text processing
     // Pocketsphinx and Sphinxbase must be install on the ubuntu machine
-    let textFileName = filename.split(".")[0] + '.txt';
+    let textFileName = fileName.split(".")[0] + '.txt';
     child_process.exec('pocketsphinx_continuous -infile ./audioclips/' + tempFileName + ' -logfn /dev/null > '
                          + textFileName, function(error) {
                              if(error) {
@@ -162,7 +162,8 @@ wss.on('connection', function connection(ws) {
 
 function guidGenerator() {
     var S4 = function() {
-        return Math.floor(((1+Math.random())*0x10000)|0).toString(16).substring(1);
+        
+        return (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
     };
     return (S4());
 }
