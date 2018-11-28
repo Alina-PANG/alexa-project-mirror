@@ -4,19 +4,22 @@
 
 const express = require('express');
 const fileUpload = require('express-fileupload');
-const app = express();
-
+const fs = require('fs');
+const https = require('https');
 const WebSocket = require('ws');
 
+
+var privateKey = fs.readFileSync('key.pem');
+var certificate = fs.readFileSync('cert.pem');
+var credentials = {key: privateKey, cert: certificate};
+
+const app = express();
+
 let clientSockets = [];
- 
+
 setInterval(() => {
     //Heartbeat Check code....
-}, 5000); // Check Every 5 Seconds 
-
-const wss = new WebSocket.Server({
-  port: 7070
-});
+}, 5000); // Check Every 5 Seconds
 
 app.use(express.static('public'));
 
@@ -32,7 +35,7 @@ app.post("/request", (req, res) => {
         if(socket.ID == req.body.ID){
             socket.WebSocket.send(JSON.stringify(
                 {
-                    type: "EchoRequest", 
+                    type: "EchoRequest",
                     state: req.body.state // Stop, Start, Pause, etc......
                 }
             )); // Change this to suit needs
@@ -63,9 +66,19 @@ app.post('/upload', function(req, res) {
     });
 });
 
+
 app.listen("8080", () => {
     console.log("listening")
 });
+
+
+var httpsServer = https.createServer(credentials, app);
+httpsServer.listen(8443);
+
+const wss = new WebSocket.Server({
+  server: httpsServer
+});
+
 
 // websocket server, on connection generate ID and send display on front end
 wss.on('connection', function connection(ws) {
@@ -81,7 +94,7 @@ wss.on('connection', function connection(ws) {
     console.log("connected client")
     ws.send(JSON.stringify(
         {
-            type: "Initial", 
+            type: "Initial",
             state: null,
             data: id
         }

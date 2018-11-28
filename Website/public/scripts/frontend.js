@@ -3,7 +3,7 @@
  */
 
 // Create WebSocket connection.
-const socket = new WebSocket('ws://localhost:7070');
+const socket = new WebSocket('wss://localhost:8443');
 
 // Connection opened
 socket.addEventListener('open', function (event) {
@@ -22,7 +22,7 @@ socket.addEventListener('message', function(event) {
     }
 
     if(data.type == "EchoRequest"){
-        
+
         var elem = document.querySelector('#state');
         var html = elem.innerHTML;
         elem.innerHTML = "" + data.state
