@@ -10,9 +10,9 @@
  const db_func = require('./database/db_connection.js')
  const WebSocket = require('ws');
  const fs = require('fs');
- // comment
- // const sox = require('sox');
- // const child_process = require('child_process');
+ // must install sox for audio processing and transcription
+ const sox = require('sox');
+ const child_process = require('child_process');
 
  app.use(express.json());
  app.use(bodyParser.urlencoded({ extended: true }));
@@ -21,7 +21,7 @@
  app.use(express.static(__dirname + '/views/public'));
  // file upload
 app.use(fileUpload());
-app.use(express.static('audioclips'));
+app.use('/audioclips',express.static('audioclips'));
 
 let clientSockets = [];
 
@@ -78,39 +78,40 @@ app.post('/upload', function(req, res) {
     // resample the audio to 16000 bit, single channel wav for the transcription server
     // sox must be installed on the machine as well as the nodejs package sox
     //comment
-    // let tempFileName = filename + '.temp';
-    // var job = sox.transcode('./audioclips/' + filename, './audioclips/' + tempFileName, {
-    //     sampleRate: 16000,
-    //     format: 'wav',
-    //     channelCount: 1,
-    //     bitrate: 16 *1024,
-    // });
+    let tempFileName = filename + '.temp';
+    var job = sox.transcode('./audioclips/' + filename, './audioclips/' + tempFileName, {
+         sampleRate: 16000,
+         format: 'wav',
+         channelCount: 1,
+         bitrate: 16 *1024,
+     });
 
-    // job.on('error', function(err) {
-    //     console.error(err);
+     job.on('error', function(err) {
+         console.error(err);
+     });
 
-    // job.start();
+    job.start();
 
-    // // Speech to text processing
-    // // Pocketsphinx and Sphinxbase must be install on the ubuntu machine
-    // let textFileName = filename.split(".")[0] + '.txt';
-    // child_process.exec('pocketsphinx_continuous -infile ./audioclips/' + tempFileName + ' -logfn /dev/null > '
-    //                     + textFileName, function(error) {
-    //                         if(error) {
-    //                             console.log(error.stack);
-    //                             console.log('error code ' + error.code);
-    //                         }
-    //                     });
+    // Speech to text processing
+    // Pocketsphinx and Sphinxbase must be install on the ubuntu machine
+    let textFileName = filename.split(".")[0] + '.txt';
+    child_process.exec('pocketsphinx_continuous -infile ./audioclips/' + tempFileName + ' -logfn /dev/null > '
+                         + textFileName, function(error) {
+                             if(error) {
+                                 console.log(error.stack);
+                                 console.log('error code ' + error.code);
+                             }
+                         });
 
-    // // Delete temp file
-    // fs.unlinkSync('./audioclips/' + tempFileName);
+    // Delete temp file
+    fs.unlinkSync('./audioclips/' + tempFileName);
 
     // file is uploaded, push link to DB
     // TODO: need domain to get URL
-    let URL = `http://localhost:8080/audioclips/${fileName}`;
+    let URL = `http://ec2-54-210-24-104.compute-1.amazonaws.com/audioclips/${fileName}`;
 
     //comment
-    // let txtURL = `http://localhost:8080/audioclips/${textFileName}`;
+    let txtURL = `http://ec2-54-210-24-104.compute-1.amazonaws.com/audioclips/${textFileName}`;
     db_func.createAudio(meetingID, URL, txtURL);
 
 
