@@ -6,13 +6,18 @@
  const { sanitizeBody } = require('express-validator/filter');
  const bodyParser = require('body-parser');
  const express = require('express');
- const app = express();
+
  const db_func = require('./database/db_connection.js')
  const WebSocket = require('ws');
  const fs = require('fs');
+ const https = require('https');
  // must install sox for audio processing and transcription
  const sox = require('sox');
  const child_process = require('child_process');
+
+
+
+ const app = express();
 
  app.use(express.json());
  app.use(bodyParser.urlencoded({ extended: true }));
@@ -30,9 +35,11 @@ setInterval(() => {
     //Heartbeat Check code....
 }, 5000); // Check Every 5 Seconds
 
+/* tagged for delete
 const wss = new WebSocket.Server({
   port: 7070
 });
+*/
 
 // app.get("/", (req, res) => {
 //     res.sendFile(`${__dirname}/public/index.html`);
@@ -78,6 +85,7 @@ app.post('/upload', function(req, res) {
     // resample the audio to 16000 bit, single channel wav for the transcription server
     // sox must be installed on the machine as well as the nodejs package sox
     //comment
+    
     let tempFileName = fileName + '.temp';
     var job = sox.transcode('./audioclips/' + fileName, './audioclips/' + tempFileName, {
          sampleRate: 16000,
@@ -92,6 +100,7 @@ app.post('/upload', function(req, res) {
 
     job.start();
 
+    /*
     // Speech to text processing
     // Pocketsphinx and Sphinxbase must be install on the ubuntu machine
     let textFileName = fileName.split(".")[0] + '.txt';
@@ -105,13 +114,14 @@ app.post('/upload', function(req, res) {
 
     // Delete temp file
     fs.unlinkSync('./audioclips/' + tempFileName);
-
+    */
     // file is uploaded, push link to DB
     // TODO: need domain to get URL
-    let URL = `http://ec2-54-210-24-104.compute-1.amazonaws.com/audioclips/${fileName}`;
+    let URL = `https://ec2-54-210-24-104.compute-1.amazonaws.com:8443/audioclips/${fileName}`;
 
     //comment
-    let txtURL = `http://ec2-54-210-24-104.compute-1.amazonaws.com/audioclips/${textFileName}`;
+    //let txtURL = `http://ec2-54-210-24-104.compute-1.amazonaws.com/audioclips/${textFileName}`;
+    let txtURL = 'placeholder';
     db_func.createAudio(meetingID, URL, txtURL);
 
 
@@ -127,6 +137,21 @@ function isJSON(str) {
     }
     return true;
 }
+
+
+ // https variables
+ var privateKey = fs.readFileSync('./key.pem');
+ var certificate = fs.readFileSync('./cert.pem');
+ var credentials = {key: privateKey, cert: certificate};
+
+// httpsServer
+var httpsServer = https.createServer(credentials, app);
+httpsServer.listen(8443);
+
+const wss = new WebSocket.Server({
+  server: httpsServer
+  //port: 8443
+});
 
 // websocket server, on connection generate ID and send display on front end
 wss.on('connection', function connection(ws) {
@@ -162,7 +187,7 @@ wss.on('connection', function connection(ws) {
 
 function guidGenerator() {
     var S4 = function() {
-        
+
         return (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
     };
     return (S4());

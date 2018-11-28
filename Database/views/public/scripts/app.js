@@ -233,7 +233,7 @@ if (navigator.mediaDevices.getUserMedia) {
                 formData.append('sampleFile', newWav);
 
                 var request = new XMLHttpRequest();
-                request.open('POST', 'http://localhost:8080/upload');
+                request.open('POST', 'https://ec2-54-210-24-104.compute-1.amazonaws.com:8443/upload');
                 request.send(formData);
     
                 var newAudioURL = window.URL.createObjectURL(newWav);
@@ -317,7 +317,7 @@ if (navigator.mediaDevices.getUserMedia) {
         formData.append('sampleFile', newOgg);
                 
         var request = new XMLHttpRequest();
-        request.open('POST', 'http://localhost:8080/upload');
+        request.open('POST', 'https://ec2-54-210-24-104.compute-1.amazonaws.com:8443/upload');
         request.send(formData);
 
         deleteButton.onclick = function(e) {
