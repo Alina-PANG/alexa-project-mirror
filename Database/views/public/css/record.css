@@ -9,7 +9,9 @@
 body
 {
     background-image: url("../img/bg-2.png");
+    background-size: cover;
 }
+
 .main
 {
     padding-top: 10rem;
@@ -46,6 +48,14 @@ body
     background-color: transparent;
     transition: 0.5s;
 }
+
+/*button after click*/
+.btn:visited, .btn:focus
+{
+    color: white;
+    background: none;
+}
+
 /*top buttons (record/stop)*/
 /*space between top and bottom buttons*/
 #top
