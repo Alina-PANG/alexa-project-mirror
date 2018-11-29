@@ -1,4 +1,6 @@
-/* @author Claudia Mastan */
+/* @author Claudia Mastan
+            Hangzhi, Pang
+ */
 
 @import 'base.css';
 
@@ -44,7 +46,6 @@ body
     background-color: transparent;
     transition: 0.5s;
 }
-
 /*top buttons (record/stop)*/
 /*space between top and bottom buttons*/
 #top
@@ -97,4 +98,15 @@ body
 }
 .sound-clips{
     margin-bottom: 60px;
+}
+.clip p{
+    flex:2;
+        padding-top: 14px;
+}
+.clip audio{
+flex:5;
+}
+.btn-div{
+flex:2;
+padding-top: 14px;
 }

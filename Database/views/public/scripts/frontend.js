@@ -3,7 +3,10 @@
  */
 
 // Create WebSocket connection.
-const socket = new WebSocket('wss://ec2-54-210-24-104.compute-1.amazonaws.com:8443');
+//const socket = new WebSocket('wss://ec2-54-210-24-104.compute-1.amazonaws.com:8443');
+
+//FLAG
+const socket = new WebSocket('wss://localhost:7070');
 
 // Connection opened
 socket.addEventListener('open', function (event) {

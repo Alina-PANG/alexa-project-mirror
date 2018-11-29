@@ -157,6 +157,7 @@ if (navigator.mediaDevices.getUserMedia) {
           var clipContainer = document.createElement('article');
           var clipLabel = document.createElement('p');
           var audio = document.createElement('audio');
+          var btnDiv = document.createElement('div');
           var deleteButton = document.createElement('button');
          
           clipContainer.classList.add('clip');
@@ -171,9 +172,11 @@ if (navigator.mediaDevices.getUserMedia) {
           }
     
           clipContainer.appendChild(clipLabel);
-          clipContainer.appendChild(audio);
-          clipContainer.appendChild(deleteButton);
+          clipContainer.appendChild(audio)
+          clipContainer.appendChild(btnDiv);
+          btnDiv.appendChild(deleteButton)
           soundClips.appendChild(clipContainer);
+          btnDiv.classList.add('btn-div');
     
           audio.controls = true;
           var blob = new Blob(chunks, { 'type' : 'audio/ogg; codecs=opus' });      

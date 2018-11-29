@@ -12,8 +12,8 @@
  const fs = require('fs');
  const https = require('https');
  // must install sox for audio processing and transcription
- const sox = require('sox');
- const child_process = require('child_process');
+ // const sox = require('sox');
+ // const child_process = require('child_process');
 
 
 
@@ -86,19 +86,19 @@ app.post('/upload', function(req, res) {
     // sox must be installed on the machine as well as the nodejs package sox
     //comment
     
-    let tempFileName = fileName + '.temp';
-    var job = sox.transcode('./audioclips/' + fileName, './audioclips/' + tempFileName, {
-         sampleRate: 16000,
-         format: 'wav',
-         channelCount: 1,
-         bitrate: 16 *1024,
-     });
+    // let tempFileName = fileName + '.temp';
+    // var job = sox.transcode('./audioclips/' + fileName, './audioclips/' + tempFileName, {
+    //      sampleRate: 16000,
+    //      format: 'wav',
+    //      channelCount: 1,
+    //      bitrate: 16 *1024,
+    //  });
 
-     job.on('error', function(err) {
-         console.error(err);
-     });
+    //  job.on('error', function(err) {
+    //      console.error(err);
+    //  });
 
-    job.start();
+    // job.start();
 
     /*
     // Speech to text processing
@@ -138,7 +138,7 @@ function isJSON(str) {
     return true;
 }
 
-
+/*
  // https variables
  var privateKey = fs.readFileSync('./key.pem');
  var certificate = fs.readFileSync('./cert.pem');
@@ -152,6 +152,12 @@ const wss = new WebSocket.Server({
   server: httpsServer
   //port: 8443
 });
+*/
+
+//FLAG local host
+const wss = new WebSocket.Server({
+    port:7070
+})
 
 // websocket server, on connection generate ID and send display on front end
 wss.on('connection', function connection(ws) {
