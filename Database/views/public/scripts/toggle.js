@@ -18,8 +18,26 @@ $(document).ready(() => {
 	// 			 }
 	// });
 
-  function getContent(data, mtg_id){
-	var rows = data.rows;
+ 
+
+  $("#loader").hide();
+	$('.urls_content').on('click', '.delete_audio_btn', function (){
+		var $this = $(this);
+		var mtg_id = $this.attr('mtg-id');
+		$("#loader").fadeIn();
+		if (confirm('Confirm to delete the audio and text record?')) {
+		// function showDialog() {
+		// 	 $("#dialog1").dialog('open');
+		//    return def.promise();
+		// }
+		// showDialog().done(function() {
+
+		var request = $.ajax({
+				url: $this.attr('mtg-id') + '/files/delete/' + $this.attr('audio-id'),
+				type: 'POST',
+				dataType: 'json',
+				success: (data) => {
+						var rows = data.rows;
 	var content="";
 	for (let i=0;i<rows.length;i++){
 		content += `
@@ -39,27 +57,6 @@ $(document).ready(() => {
 			</div>
 		</div>`;
 	}
-	return content;
-  }
-
-  $("#loader").hide();
-	$('.urls_content').on('click', '.delete_audio_btn', function (){
-		var $this = $(this);
-		var mtg_id = $this.attr('mtg-id');
-		$("#loader").fadeIn();
-		if (confirm('Confirm to delete the audio and text record?')) {
-		// function showDialog() {
-		// 	 $("#dialog1").dialog('open');
-		//    return def.promise();
-		// }
-		// showDialog().done(function() {
-
-		var request = $.ajax({
-				url: $this.attr('mtg-id') + '/files/delete/' + $this.attr('audio-id'),
-				type: 'POST',
-				dataType: 'json',
-				success: (data) => {
-					getContent(data, mtg_id);
 					$('#'+mtg_id).html(content);
 				}//success
 			})//ajax;
