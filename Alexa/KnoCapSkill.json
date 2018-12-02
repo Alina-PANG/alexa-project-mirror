@@ -1,0 +1,93 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "kno cap",
+            "intents": [
+                {
+                    "name": "AMAZON.FallbackIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                },
+                {
+                    "name": "SetMeetingIdIntent",
+                    "slots": [
+                        {
+                            "name": "id",
+                            "type": "AMAZON.NUMBER"
+                        }
+                    ],
+                    "samples": [
+                        "{id}",
+                        "meeting id {id}",
+                        "set meeting id {id}",
+                        "set meeting id to {id}"
+                    ]
+                },
+                {
+                    "name": "GetMeetingIdIntent",
+                    "slots": [],
+                    "samples": [
+                        "meeting id",
+                        "tell me my meeting id",
+                        "what is my meeting id",
+                        "get meeting id"
+                    ]
+                },
+                {
+                    "name": "StartRecordingIntent",
+                    "slots": [],
+                    "samples": [
+                        "record",
+                        "start",
+                        "start meeting",
+                        "start recording"
+                    ]
+                },
+                {
+                    "name": "StopRecordingIntent",
+                    "slots": [],
+                    "samples": [
+                        "stop recording"
+                    ]
+                },
+                {
+                    "name": "ClipThirtyIntent",
+                    "slots": [],
+                    "samples": [
+                        "clip thirty",
+                        "clip"
+                    ]
+                },
+                {
+                    "name": "ClipSixtyIntent",
+                    "slots": [],
+                    "samples": [
+                        "clip sixty",
+                        "long clip"
+                    ]
+                },
+                {
+                    "name": "SilentIntent",
+                    "slots": [],
+                    "samples": []
+                }
+            ],
+            "types": []
+        }
+    }
+}
