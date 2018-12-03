@@ -1,44 +1,66 @@
 /**
  * @author Hangzhi Pang
+ * @author Juwin Viray
+ * 
+ * This file is the webserver for the knocap project. It processes the http/https requests
+ * and perform functions based off different requests
  */
+
+ // node packages related to express webserver
  const { body,validationResult } = require('express-validator/check');
  const fileUpload = require('express-fileupload');
  const { sanitizeBody } = require('express-validator/filter');
  const bodyParser = require('body-parser');
  const express = require('express');
 
+ // object for database manipulation
  const db_func = require('./database/db_connection.js')
+ 
+ // node package for websocket and websocket server
  const WebSocket = require('ws');
+
+ // node package file server (for file operations)
  const fs = require('fs');
+
+ // node package for https
  const https = require('https');
+
+ // node process for SoX (audio processor) and Speech to text
  // must install sox for audio processing and transcription
+ // must install pocketsphinx and sphinxbase
+ // child_process will run an instance of pocketsphinx on the server
 const sox = require('sox');
 const child_process = require('child_process');
 
 // DNS name of instance, update this when you restart the AWS EC2 instance
 const dnsInstance = 'ec2-52-207-221-188.compute-1.amazonaws.com';
 
+// app setup
+const app = express();
 
- const app = express();
+app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.set('view engine', 'ejs');
+app.use(express.static(__dirname + '/views/public'));
 
- app.use(express.json());
- app.use(bodyParser.urlencoded({ extended: true }));
- app.use(bodyParser.json());
- app.set('view engine', 'ejs');
- app.use(express.static(__dirname + '/views/public'));
- // file upload
 app.use(fileUpload());
 app.use('/audioclips',express.static('audioclips'));
 
-let clientSockets = [];
 
-// use a heartbeat check to close unused sockets
-setInterval(() => {
-    //Heartbeat Check code....
-}, 5000); // Check Every 5 Seconds
+ // HTTPS  setup turn these off when working locally
+ // https variables
+ var privateKey = fs.readFileSync('./key.pem');
+ var certificate = fs.readFileSync('./cert.pem');
+ var credentials = {key: privateKey, cert: certificate};
 
+// httpsServer
+var httpsServer = https.createServer(credentials, app);
+httpsServer.listen(8443);
+// END HTTPS
 
-// state changer
+// STATE CHANGE REQUEST
+// processes state change request from external source (alexa)
 app.post("/request", (req, res) => {
     //console.log(req.body);
     clientSockets.forEach((socket) => {
@@ -46,15 +68,17 @@ app.post("/request", (req, res) => {
             socket.WebSocket.send(JSON.stringify(
                 {
                     type: "EchoRequest",
-                    state: req.body.state // Stop, Start, Pause, etc......
+                    state: req.body.state // holddown, holdup, clip30, etc......
                 }
-            )); // Change this to suit needs
+            ));
         }
     });
     res.send("OKAY");
 });
 
-//file upload and transcription happens here
+// UPLOAD REQUEST
+// processes an upload request from front end.
+// file upload and transcription happens here
 app.post('/upload', function(req, res) {
     //console.log(req);
     if(Object.keys(req.files).length == 0) {
@@ -63,6 +87,8 @@ app.post('/upload', function(req, res) {
 
     // The name of input field
     let sampleFile = req.files.sampleFile;
+
+    // get file name and meeting ID
     let fileName = sampleFile.name;
     let meetingID = fileName.split('_')[0];
 
@@ -75,12 +101,14 @@ app.post('/upload', function(req, res) {
         
         // Transcription
 
-        // resample the audio to 16000 bit, single channel wav for the transcription server
+        // resample the audio to 16000 bit, single channel wav for the transcription software
+        // the transcoded copy is sent to the software and deleted later
         // sox must be installed on the machine as well as the nodejs package sox
-        //comment
+        // note: this part must be commented out if attempting to work locally
         
-        let tempFileName = fileName.split('_')[0] + 'temp'+ fileName.split('_')[1] ;
-        //console.log(tempFileName);
+        let tempFileName = fileName.split('_')[0] + 'temp'+ fileName.split('_')[1];
+
+        // transcode happens here
         var job = sox.transcode('./audioclips/' + fileName, './audioclips/' + tempFileName, {
             sampleRate: 16000,
             format: 'wav',
@@ -94,9 +122,12 @@ app.post('/upload', function(req, res) {
 
         job.start();
 
-        // Speech to text processing
-        // Pocketsphinx and Sphinxbase must be install on the ubuntu machine
+        // Speech to text Processing
+        // Pocketsphinx and Sphinxbase must be installed on the ubuntu machine
+        
         var textFileName = fileName.split(".")[0] + '.txt';
+
+        // this runs a command line instruction to create a text file from the speech to text software
         var runCP = child_process.exec('pocketsphinx_continuous -infile ./audioclips/' + tempFileName + ' -logfn /dev/null > ./audioclips/'
             + textFileName, function(error) {
                 if(error) {
@@ -105,25 +136,28 @@ app.post('/upload', function(req, res) {
                 }
         });
 
-        // Delete temp file
+        // Delete temporary transcoded file
         runCP.on('close', function() {
             fs.unlinkSync('./audioclips/' + tempFileName)
         });
-       // fs.unlinkSync('./audioclips/' + tempFileName);
 
-        // file is uploaded, push link to DB
+        // file is uploaded, create URL strings
         let URL = `https://` + dnsInstance +`:8443/audioclips/${fileName}`;
 
-        //comment
+        // comment this out if running local host
         let txtURL = `https://` + dnsInstance +`:8443/audioclips/${textFileName}`;
+        
+        // comment this in if running local host
         //let txtURL = 'placeholder';
+
+        // push link(s) to database
         db_func.createAudio(meetingID, URL, txtURL);
 
     });
 });
 
 
-//JSON check
+//JSON check - helper function
 function isJSON(str) {
     try {
         JSON.parse(str);
@@ -133,16 +167,16 @@ function isJSON(str) {
     return true;
 }
 
- // HTTPS turn these off when working locally
- // https variables
- var privateKey = fs.readFileSync('./key.pem');
- var certificate = fs.readFileSync('./cert.pem');
- var credentials = {key: privateKey, cert: certificate};
+// websocket array. When a new socket connects it stores the connection data here
+let clientSockets = [];
 
-// httpsServer
-var httpsServer = https.createServer(credentials, app);
-httpsServer.listen(8443);
-// END HTTPS
+//TODO: implement heartbeat check
+// use a heartbeat check to close unused sockets
+/*
+setInterval(() => {
+    //Heartbeat Check code....
+}, 5000); // Check Every 5 Seconds
+*/
 
 // Turn this off when working locally
 const wss = new WebSocket.Server({
@@ -186,7 +220,7 @@ wss.on('connection', function connection(ws) {
      //console.log(clientSockets);
 });
 
-
+// Generates 4 digit code for websocket
 function guidGenerator() {
     var S4 = function() {
 
@@ -195,7 +229,7 @@ function guidGenerator() {
     return (S4());
 }
 
-// Hangzhi Pang
+// Hangzhi Pang - Database functions/routing/rendering
  app.get("/", (req, res) => {
     res.render("public/index");
 });

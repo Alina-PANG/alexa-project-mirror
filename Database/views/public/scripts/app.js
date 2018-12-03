@@ -1,28 +1,33 @@
-// set up basic variables for app
-var record = document.querySelector('.record');
-var stop = document.querySelector('.stop');
+/**
+ * @author Juwin Viray 
+ * 
+ * audiobuffer-slice
+ * @author MiguelMota <https://github.com/miguelmota/audiobuffer-slice>
+ * 
+ * buffertoWAVE()
+ * @author Russel Good <https://www.russellgood.com/how-to-convert-audiobuffer-to-audio-file/
+ * 
+ * audio recording
+ * @author MDN <https://developer.mozilla.org/en-US/docs/Web/API/MediaStream_Recording_API/Using_the_MediaStream_Recording_API>
+ */
+
+// set up variables for app
 var hold = document.querySelector('.hold');
 var clip30 = document.querySelector('.clip30');
 var clip60 = document.querySelector('.clip60');
 var soundClips = document.querySelector('.sound-clips');
 var canvas = document.querySelector('.visualizer');
 var mainSection = document.querySelector('.main-controls');
-// get meeting id
 var meetID = document.getElementById('mtg_id').innerText.split(": ")[1];
 
 // DNS name of instance, update this when you restart the AWS EC2 instance
 const dnsInstanceApp = 'ec2-52-207-221-188.compute-1.amazonaws.com';
 
-// disable stop button while not recording
-
-stop.disabled = true;
-
 // visualiser setup - create web audio api context and canvas
-
 var audioCtx = new (window.AudioContext || webkitAudioContext)();
 var canvasCtx = canvas.getContext("2d");
 
-// Convert an AudioBuffer to a Blob using WAVE representation
+// helper function - Converts an AudioBuffer to a Blob/WAV
 function bufferToWave(abuffer, len) {
   var numOfChan = abuffer.numberOfChannels,
       length = len * numOfChan * 2 + 44,
@@ -63,7 +68,7 @@ function bufferToWave(abuffer, len) {
     offset++                                     // next source sample
   }
 
-  // create Blob
+  // return Blob
   return new Blob([buffer], {type: 'audio/wav'});
 
   function setUint16(data) {
@@ -77,13 +82,13 @@ function bufferToWave(abuffer, len) {
   }
 }
 
-//main block for doing the audio recording
+// RECORDING HAPPENS HERE
+// checks to see if it detects and has access to a microphone
 if (navigator.mediaDevices.getUserMedia) {
   console.log('getUserMedia supported.');
 
   var constraints = { audio: true };
   var chunks = [];
-  // the number of the clip that sessions
   var clipNumber = 1;
 
   // if we get here it means that we have sound through the device
@@ -95,6 +100,7 @@ if (navigator.mediaDevices.getUserMedia) {
     // start recording
     mediaRecorder.start();
 
+    // state changes based off of button input
     hold.onmousedown = function() {
       recordState.innerHTML = "HoldDown";
     }
@@ -118,7 +124,7 @@ if (navigator.mediaDevices.getUserMedia) {
       subtree: true
     }
 
-    // event handling
+    // event handling, state change calls appropriate function
     var observer = new MutationObserver(function(mutations) {
         let state = recordState.innerHTML;
         if(state == "HoldDown") {
@@ -126,8 +132,7 @@ if (navigator.mediaDevices.getUserMedia) {
           console.log(state);
         }
         if(state == "HoldUp") {
-          // holdUp();
-          // changed to clip one hour so we can send to sox processor
+          // releasing hold up button will clip up to an hour of sound
           clipSec(3600); 
           console.log(state);
         }
@@ -145,16 +150,22 @@ if (navigator.mediaDevices.getUserMedia) {
    
     // state functions
     
+    // clipSec will clip the time in seconds passed in, if the duration of the recording is less than the amount of seconds
+    // it will clip the entire buffer
     function clipSec(sec) {
       if(mediaRecorder.state == 'recording'){
+        // stop recording
         mediaRecorder.stop();
 
+        // process the chunks
         mediaRecorder.onstop = function(e) {
           console.log("data available after MediaRecorder.stop() called.");
     
+          // TODO: possible future implementation to name clips
           //var clipName = prompt('Enter a name for your sound clip?','My unnamed clip');
           var clipName = 'clip'+ clipNumber++;
-          console.log(clipName);
+          
+          // create DOM objects for webpage
           var clipContainer = document.createElement('article');
           var clipLabel = document.createElement('p');
           var audio = document.createElement('audio');
@@ -183,14 +194,15 @@ if (navigator.mediaDevices.getUserMedia) {
           var blob = new Blob(chunks, { 'type' : 'audio/ogg; codecs=opus' });      
           
           chunks = [];
-          // this creates the audio file
+          // this creates the audio file from the collected blob
           var audioURL = window.URL.createObjectURL(blob);
           
-          //clip here
+          //clipping happens here here
           var audioContext = new AudioContext();
           var analyser = audioContext.createAnalyser();
           var source = audioContext.createBufferSource();
         
+          //this portion attempts to get the blob and process it, this can be refactored and written out later
           var xhr = new XMLHttpRequest();
           xhr.open('GET', audioURL);
           xhr.responseType = 'arraybuffer';
@@ -212,9 +224,14 @@ if (navigator.mediaDevices.getUserMedia) {
             audioContext.decodeAudioData(audioData, decodeDone);
           }
         
+          // this function decodes the audio data into a buffer that can be manipulated
+          // this is where we set how long the clip should be
           function decodeDone(buffer) {
-            var begin;
-            var end;
+            // note: should be in miliseconds
+            var begin; // begining of our new sound buffer
+            var end; // end of where we want to clip, usually buffer.duration (the end of the buffer)
+
+            // if the amount to clip is longer than duration, clip the entire buffer
             if(sec > buffer.duration){
               begin = 0;
               end = buffer.duration * 1000;
@@ -223,16 +240,20 @@ if (navigator.mediaDevices.getUserMedia) {
               begin = buffer.duration * 1000 - secConvert;
               end = buffer.duration * 1000;
             }
-         
     
+            // creates a new buffer that contains only the timeframe we're interested in
             audioBufferSlice(buffer, begin, end, function(error, slicedAudioBuffer) {
               if (error) {
                 console.error(error);
               } else {
+                // the buffer is now the time-sliced buffer
                 source.buffer = slicedAudioBuffer;
     
+                // create a new wav file
                 var wavBlob = bufferToWave(source.buffer, source.buffer.length)
                 var newWav = new File([wavBlob], meetID + '_' + clipName + '.wav');
+
+                // upload the file into the server
                 var formData = new FormData();
                 formData.append('sampleFile', newWav);
 
@@ -240,17 +261,20 @@ if (navigator.mediaDevices.getUserMedia) {
                 request.open('POST', 'https://' + dnsInstanceApp + ':8443/upload');
                 request.send(formData);
     
+                // update the webpage with the clipped source
                 var newAudioURL = window.URL.createObjectURL(newWav);
-    
-        
                 audio.src = newAudioURL;
               }
 
+              // This does not delete the file from the server, only deletes the instance on the recording page
+              // TODO: future implementation may have this delete file from DB and server
               deleteButton.onclick = function(e) {
                 evtTgt = e.target;
                 evtTgt.parentNode.parentNode.removeChild(evtTgt.parentNode);
               }
         
+              // TODO: future implementation, clip renaming
+              /*
               clipLabel.onclick = function() {
                 var existingName = clipLabel.textContent;
                 var newClipName = prompt('Enter a new name for your sound clip?');
@@ -260,15 +284,20 @@ if (navigator.mediaDevices.getUserMedia) {
                   clipLabel.textContent = newClipName;
                 }
               }
+              */
+
             });
             
           }
         }
       }
+
+      // restart the recorder and reset the state to Ready
       mediaRecorder.start();
       recordState.innerHTML = 'Ready';
     }
 
+    // clears out old chunk data
     function holdDown(){
       if(mediaRecorder.state == 'recording'){
         mediaRecorder.stop();
@@ -280,70 +309,7 @@ if (navigator.mediaDevices.getUserMedia) {
       mediaRecorder.start();
     }
 
-    function holdUp(){
-      mediaRecorder.stop();
-      mediaRecorder.onstop = function(e) {
-        console.log("data available after MediaRecorder.stop() called.");
-  
-        //var clipName = prompt('Enter a name for your sound clip?','My unnamed clip');
-        var clipName = 'clip'+ clipNumber++;
-        console.log(clipName);
-        var clipContainer = document.createElement('article');
-        var clipLabel = document.createElement('p');
-        var audio = document.createElement('audio');
-        var deleteButton = document.createElement('button');
-       
-        clipContainer.classList.add('clip');
-        audio.setAttribute('controls', '');
-        deleteButton.textContent = 'Delete';
-        deleteButton.className = 'delete';
-  
-        if(clipName === null) {
-          clipLabel.textContent = 'My unnamed clip';
-        } else {
-          clipLabel.textContent = clipName;
-        }
-  
-        clipContainer.appendChild(audio);
-        clipContainer.appendChild(clipLabel);
-        clipContainer.appendChild(deleteButton);
-        soundClips.appendChild(clipContainer);
-  
-        audio.controls = true;
-        var blob = new Blob(chunks, { 'type' : 'audio/ogg; codecs=opus' });
-        chunks = [];
-        // this creates the audio file
-        var audioURL = window.URL.createObjectURL(blob);
-        audio.src = audioURL;
-
-        var newOgg = new File([blob], meetID + '_' + clipName + '.wav');
-        var formData = new FormData();
-        formData.append('sampleFile', newOgg);
-                
-        var request = new XMLHttpRequest();
-        request.open('POST', 'https://' + dnsInstanceApp + ':8443/upload');
-        request.send(formData);
-
-        deleteButton.onclick = function(e) {
-          evtTgt = e.target;
-          evtTgt.parentNode.parentNode.removeChild(evtTgt.parentNode);
-        }
-  
-        clipLabel.onclick = function() {
-          var existingName = clipLabel.textContent;
-          var newClipName = prompt('Enter a new name for your sound clip?');
-          if(newClipName === null) {
-            clipLabel.textContent = existingName;
-          } else {
-            clipLabel.textContent = newClipName;
-          }
-        }
-      
-      }
-      mediaRecorder.start();
-      recordState.innerHTML = 'Ready';
-    }
-
+    // when data is recieved from microphone push into chunks
     mediaRecorder.ondataavailable = function(e) {
       chunks.push(e.data);
     }
@@ -370,7 +336,6 @@ function visualize(stream) {
   var dataArray = new Uint8Array(bufferLength);
 
   source.connect(analyser);
-  //analyser.connect(audioCtx.destination);
 
   draw()
 

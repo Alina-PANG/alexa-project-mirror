@@ -1,3 +1,7 @@
+/**
+ * @author MiguelMota <https://github.com/miguelmota/audiobuffer-slice>
+ */
+
 (function(root) {
   'use strict';
 
