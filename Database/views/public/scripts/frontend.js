@@ -2,11 +2,15 @@
  * @author KillerDucks <https://github.com/KillerDucks>
  */
 
-// Create WebSocket connection.
-//const socket = new WebSocket('wss://ec2-54-210-24-104.compute-1.amazonaws.com:8443');
+// DNS name of instance, update this when you restart the AWS EC2 instance
+const dnsInstanceFE = 'ec2-52-207-221-188.compute-1.amazonaws.com';
 
-//FLAG
-const socket = new WebSocket('wss://localhost:7070');
+// Create WebSocket connection. turn off when working locally
+const socket = new WebSocket('wss://' + dnsInstanceFE + ':8443');
+
+
+//FLAG turn on when working locally
+//const socket = new WebSocket('wss://localhost:7070');
 
 // Connection opened
 socket.addEventListener('open', function (event) {

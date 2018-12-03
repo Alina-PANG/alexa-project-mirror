@@ -12,9 +12,11 @@
  const fs = require('fs');
  const https = require('https');
  // must install sox for audio processing and transcription
- // const sox = require('sox');
- // const child_process = require('child_process');
+const sox = require('sox');
+const child_process = require('child_process');
 
+// DNS name of instance, update this when you restart the AWS EC2 instance
+const dnsInstance = 'ec2-52-207-221-188.compute-1.amazonaws.com';
 
 
  const app = express();
@@ -35,19 +37,10 @@ setInterval(() => {
     //Heartbeat Check code....
 }, 5000); // Check Every 5 Seconds
 
-/* tagged for delete
-const wss = new WebSocket.Server({
-  port: 7070
-});
-*/
-
-// app.get("/", (req, res) => {
-//     res.sendFile(`${__dirname}/public/index.html`);
-// });
 
 // state changer
 app.post("/request", (req, res) => {
-    console.log(req.body);
+    //console.log(req.body);
     clientSockets.forEach((socket) => {
         if(socket.ID == req.body.ID){
             socket.WebSocket.send(JSON.stringify(
@@ -63,7 +56,7 @@ app.post("/request", (req, res) => {
 
 //file upload and transcription happens here
 app.post('/upload', function(req, res) {
-    console.log(req);
+    //console.log(req);
     if(Object.keys(req.files).length == 0) {
         return res.status(400).send('No files were uploaded.');
     }
@@ -78,53 +71,55 @@ app.post('/upload', function(req, res) {
             return res.status(500).send(err);
 
         res.send('File uploaded!');
+
+        
+        // Transcription
+
+        // resample the audio to 16000 bit, single channel wav for the transcription server
+        // sox must be installed on the machine as well as the nodejs package sox
+        //comment
+        
+        let tempFileName = fileName.split('_')[0] + 'temp'+ fileName.split('_')[1] ;
+        //console.log(tempFileName);
+        var job = sox.transcode('./audioclips/' + fileName, './audioclips/' + tempFileName, {
+            sampleRate: 16000,
+            format: 'wav',
+            channelCount: 1,
+            bitrate: 16 *1024,
+        });
+
+        job.on('error', function(err) {
+            console.error(err);
+        });
+
+        job.start();
+
+        // Speech to text processing
+        // Pocketsphinx and Sphinxbase must be install on the ubuntu machine
+        var textFileName = fileName.split(".")[0] + '.txt';
+        var runCP = child_process.exec('pocketsphinx_continuous -infile ./audioclips/' + tempFileName + ' -logfn /dev/null > ./audioclips/'
+            + textFileName, function(error) {
+                if(error) {
+                    console.log(error.stack);
+                    console.log('error code ' + error.code);
+                }
+        });
+
+        // Delete temp file
+        runCP.on('close', function() {
+            fs.unlinkSync('./audioclips/' + tempFileName)
+        });
+       // fs.unlinkSync('./audioclips/' + tempFileName);
+
+        // file is uploaded, push link to DB
+        let URL = `https://` + dnsInstance +`:8443/audioclips/${fileName}`;
+
+        //comment
+        let txtURL = `https://` + dnsInstance +`:8443/audioclips/${textFileName}`;
+        //let txtURL = 'placeholder';
+        db_func.createAudio(meetingID, URL, txtURL);
+
     });
-
-    // Transcription
-
-    // resample the audio to 16000 bit, single channel wav for the transcription server
-    // sox must be installed on the machine as well as the nodejs package sox
-    //comment
-    
-    // let tempFileName = fileName + '.temp';
-    // var job = sox.transcode('./audioclips/' + fileName, './audioclips/' + tempFileName, {
-    //      sampleRate: 16000,
-    //      format: 'wav',
-    //      channelCount: 1,
-    //      bitrate: 16 *1024,
-    //  });
-
-    //  job.on('error', function(err) {
-    //      console.error(err);
-    //  });
-
-    // job.start();
-
-    /*
-    // Speech to text processing
-    // Pocketsphinx and Sphinxbase must be install on the ubuntu machine
-    let textFileName = fileName.split(".")[0] + '.txt';
-    child_process.exec('pocketsphinx_continuous -infile ./audioclips/' + tempFileName + ' -logfn /dev/null > '
-                         + textFileName, function(error) {
-                             if(error) {
-                                 console.log(error.stack);
-                                 console.log('error code ' + error.code);
-                             }
-                         });
-
-    // Delete temp file
-    fs.unlinkSync('./audioclips/' + tempFileName);
-    */
-    // file is uploaded, push link to DB
-    // TODO: need domain to get URL
-    let URL = `https://ec2-54-210-24-104.compute-1.amazonaws.com:8443/audioclips/${fileName}`;
-
-    //comment
-    //let txtURL = `http://ec2-54-210-24-104.compute-1.amazonaws.com/audioclips/${textFileName}`;
-    let txtURL = 'placeholder';
-    db_func.createAudio(meetingID, URL, txtURL);
-
-
 });
 
 
@@ -138,7 +133,7 @@ function isJSON(str) {
     return true;
 }
 
-/*
+ // HTTPS turn these off when working locally
  // https variables
  var privateKey = fs.readFileSync('./key.pem');
  var certificate = fs.readFileSync('./cert.pem');
@@ -147,17 +142,19 @@ function isJSON(str) {
 // httpsServer
 var httpsServer = https.createServer(credentials, app);
 httpsServer.listen(8443);
+// END HTTPS
 
+// Turn this off when working locally
 const wss = new WebSocket.Server({
   server: httpsServer
-  //port: 8443
 });
-*/
 
-//FLAG local host
+/*
+//FLAG local host, turn on whern working locally
 const wss = new WebSocket.Server({
     port:7070
 })
+*/
 
 // websocket server, on connection generate ID and send display on front end
 wss.on('connection', function connection(ws) {
@@ -169,9 +166,8 @@ wss.on('connection', function connection(ws) {
      clientSockets.push(tmp);
 
      ws.on('message', function incoming(message) {
-       console.log('received: %s', message);
+       //console.log('received: %s', message);
        if(isJSON(message)){
-           console.log('I am updating the code')
            let data = JSON.parse(message);
            if(data.type == 'UpdateDB'){
                db_func.editMtgCode(data.meetingID, data.code);
@@ -187,7 +183,7 @@ wss.on('connection', function connection(ws) {
              data: id
          }
      ));
-     console.log(clientSockets);
+     //console.log(clientSockets);
 });
 
 
@@ -218,7 +214,7 @@ function guidGenerator() {
         console.log(__dirname+": "+errors);
     }
     else {
-        console.log(__dirname+': Saving meeting name to DB...')
+        //console.log(__dirname+': Saving meeting name to DB...')
         let render_mtg_name = function (mtg_name, mtg_id, mtg_code){
             res.render("public/mtg_record", {mtg_name: mtg_name, mtg_id:mtg_id ,mtg_code: mtg_code});
         }

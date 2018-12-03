@@ -1,6 +1,4 @@
 // set up basic variables for app
-//const db_func = require('../../../database/db_connection.js')
-// db_func.createAudio(mtg_id, audio_url)
 var record = document.querySelector('.record');
 var stop = document.querySelector('.stop');
 var hold = document.querySelector('.hold');
@@ -11,6 +9,9 @@ var canvas = document.querySelector('.visualizer');
 var mainSection = document.querySelector('.main-controls');
 // get meeting id
 var meetID = document.getElementById('mtg_id').innerText.split(": ")[1];
+
+// DNS name of instance, update this when you restart the AWS EC2 instance
+const dnsInstanceApp = 'ec2-52-207-221-188.compute-1.amazonaws.com';
 
 // disable stop button while not recording
 
@@ -236,7 +237,7 @@ if (navigator.mediaDevices.getUserMedia) {
                 formData.append('sampleFile', newWav);
 
                 var request = new XMLHttpRequest();
-                request.open('POST', 'https://ec2-54-210-24-104.compute-1.amazonaws.com:8443/upload');
+                request.open('POST', 'https://' + dnsInstanceApp + ':8443/upload');
                 request.send(formData);
     
                 var newAudioURL = window.URL.createObjectURL(newWav);
@@ -320,7 +321,7 @@ if (navigator.mediaDevices.getUserMedia) {
         formData.append('sampleFile', newOgg);
                 
         var request = new XMLHttpRequest();
-        request.open('POST', 'https://ec2-54-210-24-104.compute-1.amazonaws.com:8443/upload');
+        request.open('POST', 'https://' + dnsInstanceApp + ':8443/upload');
         request.send(formData);
 
         deleteButton.onclick = function(e) {
