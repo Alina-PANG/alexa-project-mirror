@@ -26,7 +26,7 @@ socket.addEventListener('message', function(event) {
     // Initial page setup, fills in meeting ID from DB and meeting code generated from websoeckt server
     if(data.type == "Initial"){
         var elem = document.querySelector('#changeME');
-        elem.innerHTML = "Meeting ID: " + data.data
+        elem.innerHTML = "Meeting Code: " + data.data
         
         // provides 4 digit meeting code to database
         var meetID = document.getElementById('mtg_id').innerText.split(": ")[1];
