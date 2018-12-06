@@ -17,12 +17,27 @@ body
     background-color: white;
 }
 
-/*KnoCap logo*/
-.navbar-brand img
+.navbar-custom
 {
-    margin-left: 10%;
-    height: 5rem;
-    
+    padding: 12px 10px;
+}
+
+.logo
+{
+    display: inline-block;
+}
+
+.navbar-collapse
+{
+    display: inline-block;
+    position: absolute;
+    right: 10px;
+    top: -6px;
+}
+/*KnoCap logo*/
+.logo img
+{
+    height: 5rem;   
 }
 
 /*Menu icon*/
