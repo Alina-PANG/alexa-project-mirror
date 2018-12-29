@@ -26,9 +26,7 @@
                 {
                     "name": "LaunchIntent",
                     "slots": [],
-                    "samples": [
-                        "Open Hello Buttons"
-                    ]
+                    "samples": []
                 },
                 {
                     "name": "SetMeetingIdIntent",
@@ -39,6 +37,9 @@
                         }
                     ],
                     "samples": [
+                        "the meeting id is {id}",
+                        "my meeting id is {id}",
+                        "meeting id is {id}",
                         "{id}"
                     ]
                 }
